@@ -32,10 +32,8 @@ public class State {
     }
 
     public List<Card> draw(MultiplayerGameManager gameManager, int count) {
-        if (deck.isEmpty()) {
-
+        if (deck.size() < count) {
             List<Card> allButLastDiscarded = new ArrayList<>(discardPile.subList(0, discardPile.size() - 1));
-
             deck.addAll(allButLastDiscarded);
             discardPile = new ArrayList<>(discardPile.subList(discardPile.size() - 1, discardPile.size()));
             deck.shuffle(gameManager);
