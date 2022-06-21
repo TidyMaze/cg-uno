@@ -30,7 +30,7 @@ public class Referee extends AbstractReferee {
             hands.add(deck.draw(7));
         }
 
-        State state = new State(deck, new ArrayList<>(), hands);
+        state = new State(deck, new ArrayList<>(), hands);
         state.drawToDiscardPile();
         System.out.println(state.toString());
     }
