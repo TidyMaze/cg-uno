@@ -15,12 +15,25 @@ public class Agent1 {
                 cards.add(card);
             }
 
+            int validActionCount = Integer.parseInt(scanner.nextLine());
+
+            List<String> validActions = new ArrayList<>();
+            for (int i = 0; i < validActionCount; i++) {
+                String validAction = scanner.nextLine();
+                validActions.add(validAction);
+            }
+
             String lastDiscardedCard = scanner.nextLine();
 
             System.err.println("Hand: " + cards);
+            System.err.println("Valid actions: " + validActions);
             System.err.println("Last discarded card: " + lastDiscardedCard);
 
-            System.out.println(cards.get(random.nextInt(cards.size())));
+            if (validActions.isEmpty()) {
+                System.out.println("DRAW");
+            } else {
+                System.out.println(validActions.get(random.nextInt(validActions.size())));
+            }
         }
     }
 }

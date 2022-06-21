@@ -55,6 +55,11 @@ public class Referee extends AbstractReferee {
             player.sendInputLine(card.toString());
         }
 
+        player.sendInputLine(String.format("%d", validActions.size()));
+        for (Card card : validActions) {
+            player.sendInputLine(card.toString());
+        }
+
         player.sendInputLine(lastDiscardedCard.map(Card::toString).orElse("NO_DISCARDED_CARD"));
         player.execute();
         try {
