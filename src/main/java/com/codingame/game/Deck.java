@@ -24,6 +24,10 @@ class Deck {
         this.cards.add(card);
     }
 
+    public void addAll(List<Card> cards) {
+        this.cards.addAll(cards);
+    }
+
     static Deck buildDeck() {
         Deck d = new Deck();
 
@@ -81,5 +85,9 @@ class Deck {
         ArrayList<Card> res = new ArrayList<>(cards.subList(0, count));
         cards = cards.subList(count, cards.size());
         return res;
+    }
+
+    public boolean isEmpty() {
+        return cards.isEmpty();
     }
 }

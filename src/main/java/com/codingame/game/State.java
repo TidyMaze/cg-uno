@@ -1,5 +1,7 @@
 package com.codingame.game;
 
+import com.codingame.gameengine.core.MultiplayerGameManager;
+
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -26,5 +28,13 @@ public class State {
 
     void drawToDiscardPile() {
         discardPile.addAll(deck.draw(1));
+    }
+
+    public List<Card> draw(MultiplayerGameManager gameManager, int count) {
+        if (deck.isEmpty()) {
+            deck.addAll(discardPile);
+            deck.shuffle(gameManager);
+        }
+        return deck.draw(count);
     }
 }

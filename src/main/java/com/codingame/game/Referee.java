@@ -47,7 +47,7 @@ public class Referee extends AbstractReferee {
         List<Action> validActions = GameEngine.getValidActions(state, player.getIndex());
 
         if (validActions.isEmpty()) {
-            Card drawn = state.deck.draw(1).get(0);
+            Card drawn = state.draw(gameManager, 1).get(0);
             state.hands.get(player.getIndex()).add(drawn);
 
             validActions = GameEngine.getValidActions(state, player.getIndex());
