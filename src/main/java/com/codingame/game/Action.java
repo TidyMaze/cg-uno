@@ -1,5 +1,6 @@
 package com.codingame.game;
 
+import java.util.Objects;
 import java.util.StringJoiner;
 
 interface Action {
@@ -33,6 +34,19 @@ class WildAction implements Action {
     public WildAction(Color color) {
         this.color = color;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WildAction that = (WildAction) o;
+        return color == that.color;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color);
+    }
 }
 
 class WildDrawFourAction implements Action {
@@ -46,6 +60,19 @@ class WildDrawFourAction implements Action {
     public WildDrawFourAction(Color color) {
         this.color = color;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WildDrawFourAction that = (WildDrawFourAction) o;
+        return color == that.color;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color);
+    }
 }
 
 class SimpleAction implements Action {
@@ -58,5 +85,18 @@ class SimpleAction implements Action {
 
     public SimpleAction(Card card) {
         this.card = card;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimpleAction that = (SimpleAction) o;
+        return card.equals(that.card);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(card);
     }
 }
