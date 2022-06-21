@@ -1,5 +1,7 @@
 package com.codingame.game;
 
+import com.codingame.gameengine.core.MultiplayerGameManager;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -75,7 +77,7 @@ public class GameEngine {
         }
     }
 
-    public static void playAction(State state, int playerIndex, Action action) {
+    public static void playAction(State state, int playerIndex, Action action, MultiplayerGameManager gameManager) {
 
         Card card;
         if (action instanceof SimpleAction) {
@@ -91,5 +93,11 @@ public class GameEngine {
         boolean found = state.hands.get(playerIndex).remove(card);
         assert found;
         state.discardPile.add(card);
+
+        if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof DrawTwoCard) {
+            state.hands.get(playerIndex).addAll(state.draw(gameManager, 2));
+        } else if (action instanceof WildDrawFourAction) {
+            state.hands.get(playerIndex).addAll(state.draw(gameManager, 4));
+        }
     }
 }
