@@ -39,6 +39,8 @@ public class State {
             deck.addAll(allButLastDiscarded);
             discardPile = new ArrayList<>(discardPile.subList(discardPile.size() - 1, discardPile.size()));
             deck.shuffle(gameManager);
+
+            System.out.println(String.format(String.format("Deck is now %d, discard pile is now %d", deck.size(), discardPile.size())));
         }
         return deck.draw(count);
     }
