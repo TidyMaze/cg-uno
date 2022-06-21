@@ -106,6 +106,8 @@ public class Referee extends AbstractReferee {
             } catch (IllegalArgumentException e) {
                 player.deactivate("Invalid action " + e.getMessage());
                 player.setScore(-1);
+            } catch (NotEnoughCardsException e) {
+                gameManager.endGame();
             }
         }
 

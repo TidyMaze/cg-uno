@@ -34,7 +34,7 @@ public class State {
     public List<Card> draw(MultiplayerGameManager gameManager, int count) {
         if ((deck.size() + Math.max(0, discardPile.size() - 1)) < count) {
             System.out.println("Not enough cards in deck and discard pile");
-            gameManager.endGame();
+            throw new NotEnoughCardsException();
         }
 
         if (deck.size() < count) {
