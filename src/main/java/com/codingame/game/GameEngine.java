@@ -34,7 +34,13 @@ public class GameEngine {
     private static boolean canPlayCard(State state, Card c) {
         Card lastPlayed = state.discardPile.get(state.discardPile.size() - 1);
 
-        return isSameColor(lastPlayed, c) || isSameSymbol(c, lastPlayed) || c instanceof WildCard || c instanceof WildDrawFourCard;
+        Optional<Color> cardColor = getCardColor(c);
+
+        return isSameColor(lastPlayed, c) ||
+                isSameSymbol(c, lastPlayed) ||
+                c instanceof WildCard ||
+                c instanceof WildDrawFourCard ||
+                (lastPlayed instanceof WildCard && cardColor.isPresent() && cardColor.get() == ((WildAction)lastPlayedAction).color) ||
     }
 
     private static boolean isSameColor(Card c1, Card c2) {
