@@ -1,19 +1,28 @@
 package com.codingame.game;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class GameEngine {
-    static List<Card> getValidActions(State state, int currentPlayer) {
-        ArrayList actions = new ArrayList<Card>();
+    static List<Action> getValidActions(State state, int currentPlayer) {
+        ArrayList<Action> actions = new ArrayList<Action>();
 
         List<Card> hand = state.hands.get(currentPlayer);
 
         for (Card c : hand) {
             if (canPlayCard(state, c)) {
-                actions.add(c);
+                if (c instanceof WildCard) {
+                    for (Color color : Color.values()) {
+                        actions.add(new WildAction(color));
+                    }
+                } else if (c instanceof WildDrawFourCard) {
+                    for (Color color : Color.values()) {
+                        actions.add(new WildDrawFourAction(color));
+                    }
+                } else {
+                    actions.add(new SimpleAction(c));
+                }
             }
         }
 
@@ -66,7 +75,19 @@ public class GameEngine {
         }
     }
 
-    public static void playCard(State state, int playerIndex, Card card) {
+    public static void playAction(State state, int playerIndex, Action action) {
+
+        Card card;
+        if (action instanceof SimpleAction) {
+            card = ((SimpleAction) action).card;
+        } else if (action instanceof WildAction) {
+            card = new WildCard();
+        } else if (action instanceof WildDrawFourAction) {
+            card = new WildDrawFourCard();
+        } else {
+            throw new IllegalArgumentException("Unknown action type: " + action.getClass());
+        }
+
         boolean found = state.hands.get(playerIndex).remove(card);
         assert found;
         state.discardPile.add(card);

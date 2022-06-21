@@ -1,5 +1,7 @@
 package com.codingame.game;
 
+import java.util.Objects;
+
 public class DrawTwoCard implements Card {
     private Color color;
 
@@ -14,5 +16,18 @@ public class DrawTwoCard implements Card {
 
     public Color getColor() {
         return color;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DrawTwoCard that = (DrawTwoCard) o;
+        return color == that.color;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color);
     }
 }

@@ -5,4 +5,9 @@ public class WildCard implements Card {
     public String toString() {
         return "WILD";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof WildCard;
+    }
 }

@@ -44,7 +44,7 @@ public class Referee extends AbstractReferee {
         int playerCount = gameManager.getPlayerCount();
         Player player = gameManager.getPlayer(turn % playerCount);
 
-        List<Card> validActions = GameEngine.getValidActions(state, player.getIndex());
+        List<Action> validActions = GameEngine.getValidActions(state, player.getIndex());
 
         // Input line containing the hand of the player and last card in the discard pile
         List<Card> hand = state.hands.get(player.getIndex());
@@ -56,8 +56,8 @@ public class Referee extends AbstractReferee {
         }
 
         player.sendInputLine(String.format("%d", validActions.size()));
-        for (Card card : validActions) {
-            player.sendInputLine(card.toString());
+        for (Action action : validActions) {
+            player.sendInputLine(action.toString());
         }
 
         player.sendInputLine(lastDiscardedCard.map(Card::toString).orElse("NO_DISCARDED_CARD"));
@@ -75,22 +75,25 @@ public class Referee extends AbstractReferee {
                 player.setScore(-1);
             }
 
-            Card card = Card.parse(line);
-            System.out.println("Player " + player.getIndex() + " played " + card);
+            Action action = Action.parse(line);
+            System.out.println("Player " + player.getIndex() + " played " + action);
 
             System.out.println("Valid actions: " + validActions);
 
-            boolean isValid = validActions.contains(card);
+            boolean isValid = validActions.contains(action);
             if (isValid) {
-                GameEngine.playCard(state, player.getIndex(), card);
+                GameEngine.playAction(state, player.getIndex(), action);
             } else {
-                player.deactivate("Invalid card " + card);
+                player.deactivate("Invalid action " + action);
                 player.setScore(-1);
             }
         } catch (TimeoutException e) {
             player.deactivate(String.format("$%d timeout!", player.getIndex()));
             player.setScore(-1);
             gameManager.endGame();
+        } catch (IllegalArgumentException e) {
+            player.deactivate("Invalid action " + e.getMessage());
+            player.setScore(-1);
         }
 
         // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished

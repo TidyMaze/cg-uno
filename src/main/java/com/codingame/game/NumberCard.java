@@ -1,5 +1,6 @@
 package com.codingame.game;
 
+import java.util.Objects;
 import java.util.StringJoiner;
 
 public class NumberCard implements Card {
@@ -12,6 +13,19 @@ public class NumberCard implements Card {
 
     public Value getValue() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NumberCard that = (NumberCard) o;
+        return color == that.color && value == that.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color, value);
     }
 
 
