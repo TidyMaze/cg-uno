@@ -9,7 +9,7 @@ public class DrawTwoCard implements Card {
 
     @Override
     public String toString() {
-        return String.format("DRAW TWO %s", color.name());
+        return String.format("DRAW_TWO %s", color.name());
     }
 
     public Color getColor() {

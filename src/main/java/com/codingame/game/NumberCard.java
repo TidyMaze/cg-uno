@@ -25,7 +25,34 @@ public class NumberCard implements Card {
         SIX,
         SEVEN,
         EIGHT,
-        NINE
+        NINE;
+
+        static Value parse(String value) {
+            switch (value) {
+                case "ZERO":
+                    return ZERO;
+                case "ONE":
+                    return ONE;
+                case "TWO":
+                    return TWO;
+                case "THREE":
+                    return THREE;
+                case "FOUR":
+                    return FOUR;
+                case "FIVE":
+                    return FIVE;
+                case "SIX":
+                    return SIX;
+                case "SEVEN":
+                    return SEVEN;
+                case "EIGHT":
+                    return EIGHT;
+                case "NINE":
+                    return NINE;
+                default:
+                    throw new IllegalArgumentException("Unknown value: " + other);
+            }
+        }
     }
 
     public NumberCard(Color color, Value value) {
