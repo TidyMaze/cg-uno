@@ -65,4 +65,10 @@ public class GameEngine {
             return Optional.empty();
         }
     }
+
+    public static void playCard(State state, int playerIndex, Card card) {
+        boolean found = state.hands.get(playerIndex).remove(card);
+        assert found;
+        state.discardPile.add(card);
+    }
 }

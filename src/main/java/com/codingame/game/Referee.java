@@ -44,7 +44,7 @@ public class Referee extends AbstractReferee {
         int playerCount = gameManager.getPlayerCount();
         Player player = gameManager.getPlayer(turn % playerCount);
 
-        int lastTurn = 42;
+        List<Card> validActions = GameEngine.getValidActions(state, player.getIndex());
 
         // Input line containing the hand of the player and last card in the discard pile
         List<Card> hand = state.hands.get(player.getIndex());
@@ -72,6 +72,16 @@ public class Referee extends AbstractReferee {
 
             Card card = Card.parse(line);
             System.out.println("Player " + player.getIndex() + " played " + card);
+
+            System.out.println("Valid actions: " + validActions);
+
+            boolean isValid = validActions.contains(card);
+            if (isValid) {
+                GameEngine.playCard(state, player.getIndex(), card);
+            } else {
+                player.deactivate("Invalid card " + card);
+                player.setScore(-1);
+            }
         } catch (TimeoutException e) {
             player.deactivate(String.format("$%d timeout!", player.getIndex()));
             player.setScore(-1);
