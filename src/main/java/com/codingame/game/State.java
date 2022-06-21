@@ -45,4 +45,8 @@ public class State {
         }
         return deck.draw(count);
     }
+
+    public void setNextPlayer(int playerId) {
+
+    }
 }

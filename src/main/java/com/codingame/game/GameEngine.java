@@ -95,9 +95,13 @@ public class GameEngine {
         state.discardPile.add(card);
 
         if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof DrawTwoCard) {
-            state.hands.get(playerIndex).addAll(state.draw(gameManager, 2));
+            int nextPlayer = (playerIndex + 1) % gameManager.getPlayerCount();
+            state.hands.get(nextPlayer).addAll(state.draw(gameManager, 2));
+            state.setNextPlayer((nextPlayer + 1) % gameManager.getPlayerCount());
         } else if (action instanceof WildDrawFourAction) {
-            state.hands.get(playerIndex).addAll(state.draw(gameManager, 4));
+            int nextPlayer = (playerIndex + 1) % gameManager.getPlayerCount();
+            state.hands.get(nextPlayer).addAll(state.draw(gameManager, 4));
+            state.setNextPlayer((nextPlayer + 1) % gameManager.getPlayerCount());
         }
     }
 }
