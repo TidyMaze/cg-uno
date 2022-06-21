@@ -82,6 +82,7 @@ class Deck {
     }
 
     List<Card> draw(int count) {
+        assert count <= this.cards.size();
         ArrayList<Card> res = new ArrayList<>(cards.subList(0, count));
         cards = new ArrayList<>(cards.subList(count, cards.size()));
         return res;
