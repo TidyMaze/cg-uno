@@ -69,6 +69,7 @@ public class Referee extends AbstractReferee {
             }
 
             Card card = Card.parse(line);
+            System.out.println("Player " + player.getIndex() + " played " + card);
         } catch (TimeoutException e) {
             player.deactivate(String.format("$%d timeout!", player.getIndex()));
             player.setScore(-1);

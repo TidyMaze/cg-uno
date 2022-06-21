@@ -50,7 +50,7 @@ public class NumberCard implements Card {
                 case "NINE":
                     return NINE;
                 default:
-                    throw new IllegalArgumentException("Unknown value: " + other);
+                    throw new IllegalArgumentException("Unknown value: " + value);
             }
         }
     }

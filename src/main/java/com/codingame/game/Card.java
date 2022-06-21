@@ -21,7 +21,7 @@ interface Card {
             case "SKIP":
                 return new SkipCard(colorParsed);
             default:
-                return new NumberCard(colorParsed, Value.parse(type));
+                return new NumberCard(colorParsed, NumberCard.Value.parse(type));
         }
     }
 
