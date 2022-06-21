@@ -30,7 +30,7 @@ public class Agent1 {
             System.err.println("Last discarded card: " + lastDiscardedCard);
 
             if (validActions.isEmpty()) {
-                System.out.println("DRAW");
+                System.out.println("CANNOT PLAY!");
             } else {
                 System.out.println(validActions.get(random.nextInt(validActions.size())));
             }
