@@ -46,54 +46,66 @@ public class Referee extends AbstractReferee {
 
         List<Action> validActions = GameEngine.getValidActions(state, player.getIndex());
 
-        // Input line containing the hand of the player and last card in the discard pile
-        List<Card> hand = state.hands.get(player.getIndex());
-        Optional<Card> lastDiscardedCard = state.discardPile.isEmpty() ? Optional.empty() : Optional.of(state.discardPile.get(state.discardPile.size() - 1));
+        if (validActions.isEmpty()) {
+            Card drawn = state.deck.draw(1).get(0);
+            state.hands.get(player.getIndex()).add(drawn);
 
-        player.sendInputLine(String.format("%d", hand.size()));
-        for (Card card : hand) {
-            player.sendInputLine(card.toString());
+            validActions = GameEngine.getValidActions(state, player.getIndex());
         }
 
-        player.sendInputLine(String.format("%d", validActions.size()));
-        for (Action action : validActions) {
-            player.sendInputLine(action.toString());
-        }
+        if (validActions.isEmpty()) {
+            Card drawnCard = state.hands.get(player.getIndex()).get(state.hands.get(player.getIndex()).size() - 1);
+            System.out.println(String.format("Player %d had no valid action, drew %s but still had no valid action", player.getIndex(), drawnCard));
+        } else {
+            // Input line containing the hand of the player and last card in the discard pile
+            List<Card> hand = state.hands.get(player.getIndex());
+            Optional<Card> lastDiscardedCard = state.discardPile.isEmpty() ? Optional.empty() : Optional.of(state.discardPile.get(state.discardPile.size() - 1));
 
-        player.sendInputLine(lastDiscardedCard.map(Card::toString).orElse("NO_DISCARDED_CARD"));
-        player.execute();
-        try {
-            List<String> outputs = player.getOutputs();
-            if (outputs.size() != 1) {
-                player.deactivate("Too many output lines!");
-                player.setScore(-1);
+            player.sendInputLine(String.format("%d", hand.size()));
+            for (Card card : hand) {
+                player.sendInputLine(card.toString());
             }
 
-            String line = outputs.get(0);
-            if (line.isEmpty()) {
-                player.deactivate("Empty line");
-                player.setScore(-1);
+            player.sendInputLine(String.format("%d", validActions.size()));
+            for (Action action : validActions) {
+                player.sendInputLine(action.toString());
             }
 
-            Action action = Action.parse(line);
-            System.out.println("Player " + player.getIndex() + " played " + action);
+            player.sendInputLine(lastDiscardedCard.map(Card::toString).orElse("NO_DISCARDED_CARD"));
+            player.execute();
+            try {
+                List<String> outputs = player.getOutputs();
+                if (outputs.size() != 1) {
+                    player.deactivate("Too many output lines!");
+                    player.setScore(-1);
+                }
 
-            System.out.println("Valid actions: " + validActions);
+                String line = outputs.get(0);
+                if (line.isEmpty()) {
+                    player.deactivate("Empty line");
+                    player.setScore(-1);
+                }
 
-            boolean isValid = validActions.contains(action);
-            if (isValid) {
-                GameEngine.playAction(state, player.getIndex(), action);
-            } else {
-                player.deactivate("Invalid action " + action);
+                Action action = Action.parse(line);
+                System.out.println("Player " + player.getIndex() + " played " + action);
+
+                System.out.println("Valid actions: " + validActions);
+
+                boolean isValid = validActions.contains(action);
+                if (isValid) {
+                    GameEngine.playAction(state, player.getIndex(), action);
+                } else {
+                    player.deactivate("Invalid action " + action);
+                    player.setScore(-1);
+                }
+            } catch (TimeoutException e) {
+                player.deactivate(String.format("$%d timeout!", player.getIndex()));
+                player.setScore(-1);
+                gameManager.endGame();
+            } catch (IllegalArgumentException e) {
+                player.deactivate("Invalid action " + e.getMessage());
                 player.setScore(-1);
             }
-        } catch (TimeoutException e) {
-            player.deactivate(String.format("$%d timeout!", player.getIndex()));
-            player.setScore(-1);
-            gameManager.endGame();
-        } catch (IllegalArgumentException e) {
-            player.deactivate("Invalid action " + e.getMessage());
-            player.setScore(-1);
         }
 
         // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
