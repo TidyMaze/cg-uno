@@ -33,6 +33,7 @@ public class State {
     public List<Card> draw(MultiplayerGameManager gameManager, int count) {
         if (deck.isEmpty()) {
             deck.addAll(discardPile);
+            discardPile.clear();
             deck.shuffle(gameManager);
         }
         return deck.draw(count);
