@@ -83,7 +83,7 @@ class Deck {
 
     List<Card> draw(int count) {
         ArrayList<Card> res = new ArrayList<>(cards.subList(0, count));
-        cards = cards.subList(count, cards.size());
+        cards = new ArrayList<>(cards.subList(count, cards.size()));
         return res;
     }
 
