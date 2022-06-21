@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.StringJoiner;
 
 public class State {
-    List<Card> deck;
+    Deck deck;
     List<Card> discardPile;
 
     List<List<Card>> hands;
 
-    public State(List<Card> deck, List<Card> discardPile, List<List<Card>> hands) {
+    public State(Deck deck, List<Card> discardPile, List<List<Card>> hands) {
         this.deck = deck;
         this.discardPile = discardPile;
         this.hands = hands;
@@ -22,5 +22,9 @@ public class State {
                 .add("discardPile=" + discardPile)
                 .add("hands=" + hands)
                 .toString();
+    }
+
+    void drawToDiscardPile() {
+        discardPile.addAll(deck.draw(1));
     }
 }

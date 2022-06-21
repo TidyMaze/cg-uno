@@ -1,10 +1,9 @@
 package com.codingame.game;
 
 import com.codingame.game.NumberCard.Value;
+import com.codingame.gameengine.core.MultiplayerGameManager;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
 
 class Deck {
 
@@ -71,5 +70,16 @@ class Deck {
 
 
         return d;
+    }
+
+    public void shuffle(MultiplayerGameManager<Player> gameManager) {
+        Random random = gameManager.getRandom();
+        Collections.shuffle(this.cards, random);
+    }
+
+    List<Card> draw(int count) {
+        ArrayList<Card> res = new ArrayList<>(cards.subList(0, count));
+        cards = cards.subList(count, cards.size());
+        return res;
     }
 }

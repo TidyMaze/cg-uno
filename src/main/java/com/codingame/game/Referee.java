@@ -1,5 +1,6 @@
 package com.codingame.game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
@@ -9,8 +10,6 @@ import com.codingame.gameengine.module.entities.GraphicEntityModule;
 import com.google.inject.Inject;
 
 public class Referee extends AbstractReferee {
-    // Uncomment the line below and comment the line under it to create a Solo Game
-    // @Inject private SoloGameManager<Player> gameManager;
     @Inject
     private MultiplayerGameManager<Player> gameManager;
     @Inject
@@ -18,26 +17,52 @@ public class Referee extends AbstractReferee {
 
     @Override
     public void init() {
-        // Initialize your game here.
-        Deck deck = Deck.buildDeck();
+        gameManager.setMaxTurns(10);
 
-        System.out.println("Deck: " + deck.toString());
+        Deck deck = Deck.buildDeck();
+        deck.shuffle(gameManager);
+
+        List<List<Card>> hands = new ArrayList<>();
+        for (int i = 0; i < gameManager.getPlayerCount(); i++) {
+            hands.add(deck.draw(7));
+        }
+
+        State state = new State(deck, new ArrayList<>(), hands);
+        state.drawToDiscardPile();
+        System.out.println(state.toString());
     }
 
     @Override
     public void gameTurn(int turn) {
-        for (Player player : gameManager.getActivePlayers()) {
-            player.sendInputLine("input");
-            player.execute();
+        System.out.println(String.format("Turn %d", turn));
+
+        boolean isFirstTurn = turn == 1;
+
+        int playerCount = gameManager.getPlayerCount();
+        Player player = gameManager.getPlayer(turn % playerCount);
+
+        int lastTurn = 42;
+
+        player.sendInputLine(String.format("Opponent played %d", lastTurn));
+        player.execute();
+        try {
+            List<String> outputs = player.getOutputs();
+            if (outputs.size() != 1) {
+                player.deactivate("Too many output lines!");
+            }
+
+            String line = outputs.get(0);
+            if (line.isEmpty()) {
+                player.deactivate("Empty line");
+            }
+
+
+        } catch (TimeoutException e) {
+            player.deactivate(String.format("$%d timeout!", player.getIndex()));
+            player.setScore(-1);
+            gameManager.endGame();
         }
 
-        for (Player player : gameManager.getActivePlayers()) {
-            try {
-                List<String> outputs = player.getOutputs();
-                // Check validity of the player output and compute the new game state
-            } catch (TimeoutException e) {
-                player.deactivate(String.format("$%d timeout!", player.getIndex()));
-            }
-        }
+        // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
     }
 }
