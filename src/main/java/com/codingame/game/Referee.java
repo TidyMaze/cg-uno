@@ -109,6 +109,8 @@ public class Referee extends AbstractReferee {
             }
         }
 
+        System.out.println(String.format("End of turn %d", turn));
+
         // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
     }
 }
