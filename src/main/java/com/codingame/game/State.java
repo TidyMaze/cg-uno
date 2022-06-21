@@ -41,6 +41,7 @@ public class State {
             deck.shuffle(gameManager);
 
             System.out.println(String.format(String.format("Deck is now %d, discard pile is now %d", deck.size(), discardPile.size())));
+            System.out.println(String.format(String.format("Players hands are now %d and %d", hands.get(0).size(), hands.get(1).size())));
         }
         return deck.draw(count);
     }
