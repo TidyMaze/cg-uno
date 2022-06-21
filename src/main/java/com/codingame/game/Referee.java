@@ -20,7 +20,7 @@ public class Referee extends AbstractReferee {
 
     @Override
     public void init() {
-        gameManager.setMaxTurns(10);
+        gameManager.setMaxTurns(200);
 
         Deck deck = Deck.buildDeck();
         deck.shuffle(gameManager);
@@ -61,11 +61,13 @@ public class Referee extends AbstractReferee {
             List<String> outputs = player.getOutputs();
             if (outputs.size() != 1) {
                 player.deactivate("Too many output lines!");
+                player.setScore(-1);
             }
 
             String line = outputs.get(0);
             if (line.isEmpty()) {
                 player.deactivate("Empty line");
+                player.setScore(-1);
             }
 
             Card card = Card.parse(line);

@@ -15,6 +15,11 @@ public class Agent1 {
                 cards.add(card);
             }
 
+            String lastDiscardedCard = scanner.nextLine();
+
+            System.err.println("Hand: " + cards);
+            System.err.println("Last discarded card: " + lastDiscardedCard);
+
             System.out.println(cards.get(random.nextInt(cards.size())));
         }
     }

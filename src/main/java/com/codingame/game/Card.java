@@ -4,24 +4,32 @@ import java.util.Optional;
 
 interface Card {
     static Card parse(String line) {
-        String[] split = line.split(" ");
-        String type = split[0];
-        String color = split[1];
-        Color colorParsed = Color.parse(color);
+        try {
+            String[] split = line.split(" ");
+            String type = split[0];
 
-        switch (type) {
-            case "WILD":
-                return new WildCard();
-            case "WILD_DRAW_FOUR":
-                return new WildDrawFourCard();
-            case "DRAW_TWO":
-                return new DrawTwoCard(colorParsed);
-            case "REVERSE":
-                return new ReverseCard(colorParsed);
-            case "SKIP":
-                return new SkipCard(colorParsed);
-            default:
-                return new NumberCard(colorParsed, NumberCard.Value.parse(type));
+            switch (type) {
+                case "WILD":
+                    return new WildCard();
+                case "WILD_DRAW_FOUR":
+                    return new WildDrawFourCard();
+            }
+
+            String color = split[1];
+            Color colorParsed = Color.parse(color);
+
+            switch (type) {
+                case "DRAW_TWO":
+                    return new DrawTwoCard(colorParsed);
+                case "REVERSE":
+                    return new ReverseCard(colorParsed);
+                case "SKIP":
+                    return new SkipCard(colorParsed);
+                default:
+                    return new NumberCard(colorParsed, NumberCard.Value.parse(type));
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid card: " + line, e);
         }
     }
 
