@@ -2,6 +2,7 @@ package com.codingame.game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
 import com.codingame.gameengine.core.AbstractReferee;
@@ -14,6 +15,8 @@ public class Referee extends AbstractReferee {
     private MultiplayerGameManager<Player> gameManager;
     @Inject
     private GraphicEntityModule graphicEntityModule;
+
+    private State state;
 
     @Override
     public void init() {
@@ -43,7 +46,16 @@ public class Referee extends AbstractReferee {
 
         int lastTurn = 42;
 
-        player.sendInputLine(String.format("Opponent played %d", lastTurn));
+        // Input line containing the hand of the player and last card in the discard pile
+        List<Card> hand = state.hands.get(player.getIndex());
+        Optional<Card> lastDiscardedCard = state.discardPile.isEmpty() ? Optional.empty() : Optional.of(state.discardPile.get(state.discardPile.size() - 1));
+
+        player.sendInputLine(String.format("%d", hand.size()));
+        for (Card card : hand) {
+            player.sendInputLine(card.toString());
+        }
+
+        player.sendInputLine(lastDiscardedCard.map(Card::toString).orElse("NO_DISCARDED_CARD"));
         player.execute();
         try {
             List<String> outputs = player.getOutputs();
