@@ -94,7 +94,7 @@ public class Referee extends AbstractReferee {
 
                 boolean isValid = validActions.contains(action);
                 if (isValid) {
-                    GameEngine.playAction(state, player.getIndex(), action);
+                    GameEngine.playAction(state, player.getIndex(), action, gameManager);
                 } else {
                     player.deactivate("Invalid action " + action);
                     player.setScore(-1);
