@@ -34,7 +34,7 @@ public class GameEngine {
     private static boolean canPlayCard(State state, Card c) {
         Card lastPlayed = state.discardPile.get(state.discardPile.size() - 1);
 
-        Optional<Color> cardColor = getCardColor(c);
+        Optional<Color> cardColor = c.getCardColor();
 
         return isSameColor(lastPlayed, c) ||
                 isSameSymbol(c, lastPlayed) ||
@@ -45,8 +45,8 @@ public class GameEngine {
     }
 
     private static boolean isSameColor(Card c1, Card c2) {
-        Optional<Color> color1 = getCardColor(c1);
-        Optional<Color> color2 = getCardColor(c2);
+        Optional<Color> color1 = c1.getCardColor();
+        Optional<Color> color2 = c2.getCardColor();
         return color1.isPresent() && color2.isPresent() && color1.get() == color2.get();
     }
 
@@ -68,20 +68,6 @@ public class GameEngine {
         }
         // other
         return false;
-    }
-
-    private static Optional<Color> getCardColor(Card c) {
-        if (c instanceof NumberCard) {
-            return Optional.of(((NumberCard) c).getColor());
-        } else if (c instanceof SkipCard) {
-            return Optional.of(((SkipCard) c).getColor());
-        } else if (c instanceof ReverseCard) {
-            return Optional.of(((ReverseCard) c).getColor());
-        } else if (c instanceof DrawTwoCard) {
-            return Optional.of(((DrawTwoCard) c).getColor());
-        } else {
-            return Optional.empty();
-        }
     }
 
     public static void playAction(State state, Action action, MultiplayerGameManager gameManager) {

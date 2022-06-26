@@ -1,6 +1,7 @@
 package com.codingame.game;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class SkipCard implements Card {
     private Color color;
@@ -12,6 +13,11 @@ public class SkipCard implements Card {
     @Override
     public String toString() {
         return String.format("SKIP %s", color.name());
+    }
+
+    @Override
+    public Optional<Color> getCardColor() {
+        return Optional.of(color);
     }
 
     public Color getColor() {

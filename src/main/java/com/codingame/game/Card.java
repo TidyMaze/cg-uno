@@ -34,6 +34,8 @@ interface Card {
     }
 
     String toString();
+
+    Optional<Color> getCardColor();
 }
 
 enum Color {

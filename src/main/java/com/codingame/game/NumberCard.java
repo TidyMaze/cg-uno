@@ -1,6 +1,7 @@
 package com.codingame.game;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 public class NumberCard implements Card {
@@ -83,5 +84,10 @@ public class NumberCard implements Card {
     @Override
     public String toString() {
         return String.format("%s %s", value.name(), color.name());
+    }
+
+    @Override
+    public Optional<Color> getCardColor() {
+        return Optional.of(color);
     }
 }
