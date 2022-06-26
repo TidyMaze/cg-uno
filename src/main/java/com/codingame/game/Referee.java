@@ -95,6 +95,7 @@ public class Referee extends AbstractReferee {
                         gameManager.addTooltip(player, "Player " + player.getIndex() + " played the last card and won!");
                         player.setScore(computeScore(state.hands, player.getIndex()));
                         gameManager.endGame();
+                        return;
                     }
                     GameEngine.playAction(state, action, gameManager);
                 } else {
