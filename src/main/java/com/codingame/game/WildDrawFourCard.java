@@ -17,4 +17,9 @@ public class WildDrawFourCard implements Card {
     public Optional<Color> getCardColor() {
         return Optional.empty();
     }
+
+    @Override
+    public int getScore() {
+        return 50;
+    }
 }

@@ -90,4 +90,9 @@ public class NumberCard implements Card {
     public Optional<Color> getCardColor() {
         return Optional.of(color);
     }
+
+    @Override
+    public int getScore() {
+        return value.intValue;
+    }
 }

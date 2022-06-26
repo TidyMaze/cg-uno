@@ -14,6 +14,11 @@ public class WildCard implements Card {
     }
 
     @Override
+    public int getScore() {
+        return 50;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         return obj instanceof WildCard;
     }

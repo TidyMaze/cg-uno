@@ -20,6 +20,11 @@ public class DrawTwoCard implements Card {
         return Optional.of(color);
     }
 
+    @Override
+    public int getScore() {
+        return 20;
+    }
+
     public Color getColor() {
         return color;
     }
