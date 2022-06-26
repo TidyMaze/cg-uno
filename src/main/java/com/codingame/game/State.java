@@ -61,6 +61,10 @@ public class State {
     }
 
     public void setNextPlayer(int playerId) {
+        if (playerId < 0) {
+            throw new IllegalArgumentException("Invalid player id " + playerId);
+        }
+        System.out.println("Setting next player to " + playerId);
         this.nextPlayer = playerId;
     }
 
