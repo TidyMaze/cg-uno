@@ -109,8 +109,7 @@ public class GameEngine {
         int currentNextPlayerIndex = nextPlayerIndex(state.rotation, playerIndex, false, gameManager.getPlayerCount());
 
         if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof DrawTwoCard) {
-            int nextPlayer = currentNextPlayerIndex;
-            state.hands.get(nextPlayer).addAll(state.draw(gameManager, 2));
+            state.hands.get(currentNextPlayerIndex).addAll(state.draw(gameManager, 2));
             skipNextPlayer = true;
             gameManager.addTooltip(gameManager.getPlayer(playerIndex), (player.getNicknameToken()) + " played a +2");
         } else if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof SkipCard) {
@@ -121,8 +120,7 @@ public class GameEngine {
         } else if (action instanceof WildAction) {
             // nothing
         } else if (action instanceof WildDrawFourAction) {
-            int nextPlayer = currentNextPlayerIndex;
-            state.hands.get(nextPlayer).addAll(state.draw(gameManager, 4));
+            state.hands.get(currentNextPlayerIndex).addAll(state.draw(gameManager, 4));
             skipNextPlayer = true;
             gameManager.addTooltip(gameManager.getPlayer(playerIndex), (player.getNicknameToken()) + " played a +4");
         }
