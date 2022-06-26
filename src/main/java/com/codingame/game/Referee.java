@@ -39,10 +39,7 @@ public class Referee extends AbstractReferee {
     public void gameTurn(int turn) {
         System.out.println(String.format("Turn %d", turn));
 
-        boolean isFirstTurn = turn == 1;
-
-        int playerCount = gameManager.getPlayerCount();
-        Player player = gameManager.getPlayer(turn % playerCount);
+        Player player = gameManager.getPlayer(state.nextPlayer);
 
         List<Action> validActions = GameEngine.getValidActions(state, player.getIndex());
 

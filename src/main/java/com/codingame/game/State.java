@@ -15,6 +15,9 @@ public class State {
 
     Optional<Action> lastAction = Optional.empty();
 
+    Rotation rotation = Rotation.CLOCKWISE;
+    public int nextPlayer;
+
     public State(Deck deck, List<Card> discardPile, List<List<Card>> hands) {
         this.deck = deck;
         this.discardPile = discardPile;
@@ -27,6 +30,9 @@ public class State {
                 .add("deck=" + deck)
                 .add("discardPile=" + discardPile)
                 .add("hands=" + hands)
+                .add("lastAction=" + lastAction)
+                .add("rotation=" + rotation)
+                .add("nextPlayer=" + nextPlayer)
                 .toString();
     }
 
@@ -55,6 +61,22 @@ public class State {
     }
 
     public void setNextPlayer(int playerId) {
+        this.nextPlayer = playerId;
+    }
 
+    public void setRotation(Rotation rotation) {
+        this.rotation = rotation;
+    }
+}
+
+enum Rotation {
+    CLOCKWISE(1),
+    COUNTER_CLOCKWISE(-1);
+
+
+    final int offset;
+
+    Rotation(int offset) {
+        this.offset = offset;
     }
 }

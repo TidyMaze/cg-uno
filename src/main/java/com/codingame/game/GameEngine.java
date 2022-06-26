@@ -101,20 +101,34 @@ public class GameEngine {
         assert found;
         state.discardPile.add(card);
 
+        boolean skipNextPlayer = false;
+
+        int currentNextPlayerIndex = nextPlayerIndex(state.rotation, playerIndex, false, gameManager.getPlayerCount());
+
         if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof DrawTwoCard) {
-            int nextPlayer = (playerIndex + 1) % gameManager.getPlayerCount();
+            int nextPlayer = currentNextPlayerIndex;
             state.hands.get(nextPlayer).addAll(state.draw(gameManager, 2));
-            state.setNextPlayer((nextPlayer + 1) % gameManager.getPlayerCount());
+            skipNextPlayer = true;
+            state.lastAction = Optional.of(action);
+        } else if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof SkipCard) {
+            skipNextPlayer = true;
+            state.lastAction = Optional.of(action);
+        } else if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof ReverseCard) {
+            state.setRotation(state.rotation.equals(Rotation.CLOCKWISE) ? Rotation.COUNTER_CLOCKWISE : Rotation.CLOCKWISE);
             state.lastAction = Optional.of(action);
         } else if (action instanceof WildAction) {
-            int nextPlayer = (playerIndex + 1) % gameManager.getPlayerCount();
-            state.setNextPlayer(nextPlayer);
             state.lastAction = Optional.of(action);
         } else if (action instanceof WildDrawFourAction) {
-            int nextPlayer = (playerIndex + 1) % gameManager.getPlayerCount();
+            int nextPlayer = currentNextPlayerIndex;
             state.hands.get(nextPlayer).addAll(state.draw(gameManager, 4));
-            state.setNextPlayer((nextPlayer + 1) % gameManager.getPlayerCount());
+            skipNextPlayer = true;
             state.lastAction = Optional.of(action);
         }
+
+        state.setNextPlayer(nextPlayerIndex(state.rotation, playerIndex, skipNextPlayer, gameManager.getPlayerCount()));
+    }
+
+    static int nextPlayerIndex(Rotation rotation, int playerIndex, boolean firstSkipped, int playerCount) {
+        return (playerIndex + (rotation.equals(Rotation.CLOCKWISE) ? 1 : -1) * (firstSkipped ? 2 : 1)) % playerCount;
     }
 }
