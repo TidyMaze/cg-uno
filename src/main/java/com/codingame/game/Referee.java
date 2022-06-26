@@ -92,7 +92,7 @@ public class Referee extends AbstractReferee {
                 boolean isValid = validActions.contains(action);
                 if (isValid) {
                     if (hand.size() == 1) {
-                        System.out.println("Player " + player.getIndex() + " played the last card and won!");
+                        gameManager.addTooltip(player, "Player " + player.getIndex() + " played the last card and won!");
                         player.setScore(computeScore(state.hands, player.getIndex()));
                         gameManager.endGame();
                     }
