@@ -129,6 +129,10 @@ public class GameEngine {
     }
 
     static int nextPlayerIndex(Rotation rotation, int playerIndex, boolean firstSkipped, int playerCount) {
-        return (playerIndex + (rotation.equals(Rotation.CLOCKWISE) ? 1 : -1) * (firstSkipped ? 2 : 1)) % playerCount;
+        int res = (playerIndex + (rotation.equals(Rotation.CLOCKWISE) ? 1 : -1) * (firstSkipped ? 2 : 1)) % playerCount;
+        if (res < 0) {
+            res += playerCount;
+        }
+        return res;
     }
 }
