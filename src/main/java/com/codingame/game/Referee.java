@@ -91,13 +91,13 @@ public class Referee extends AbstractReferee {
 
                 boolean isValid = validActions.contains(action);
                 if (isValid) {
+                    GameEngine.playAction(state, action, gameManager);
+
                     if (hand.size() == 1) {
                         gameManager.addTooltip(player, "Player " + player.getIndex() + " played the last card and won!");
                         player.setScore(computeScore(state.hands, player.getIndex()));
                         gameManager.endGame();
-                        return;
                     }
-                    GameEngine.playAction(state, action, gameManager);
                 } else {
                     player.deactivate("Invalid action " + action);
                     player.setScore(-1);
