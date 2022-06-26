@@ -84,7 +84,10 @@ public class GameEngine {
         }
     }
 
-    public static void playAction(State state, int playerIndex, Action action, MultiplayerGameManager gameManager) {
+    public static void playAction(State state, Action action, MultiplayerGameManager gameManager) {
+
+        int playerIndex = state.nextPlayer;
+        Player player = (Player) gameManager.getPlayer(playerIndex);
 
         Card card;
         if (action instanceof SimpleAction) {
@@ -119,6 +122,7 @@ public class GameEngine {
             int nextPlayer = currentNextPlayerIndex;
             state.hands.get(nextPlayer).addAll(state.draw(gameManager, 4));
             skipNextPlayer = true;
+            gameManager.addTooltip(gameManager.getPlayer(playerIndex), "Player " + (player.getNicknameToken()) + " played a +4");
         }
 
         state.lastAction = Optional.of(action);

@@ -96,7 +96,7 @@ public class Referee extends AbstractReferee {
                         player.setScore(computeScore(state.hands, player.getIndex()));
                         gameManager.endGame();
                     }
-                    GameEngine.playAction(state, player.getIndex(), action, gameManager);
+                    GameEngine.playAction(state, action, gameManager);
                 } else {
                     player.deactivate("Invalid action " + action);
                     player.setScore(-1);
