@@ -109,22 +109,19 @@ public class GameEngine {
             int nextPlayer = currentNextPlayerIndex;
             state.hands.get(nextPlayer).addAll(state.draw(gameManager, 2));
             skipNextPlayer = true;
-            state.lastAction = Optional.of(action);
         } else if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof SkipCard) {
             skipNextPlayer = true;
-            state.lastAction = Optional.of(action);
         } else if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof ReverseCard) {
             state.setRotation(state.rotation.equals(Rotation.CLOCKWISE) ? Rotation.COUNTER_CLOCKWISE : Rotation.CLOCKWISE);
-            state.lastAction = Optional.of(action);
         } else if (action instanceof WildAction) {
-            state.lastAction = Optional.of(action);
+            // nothing
         } else if (action instanceof WildDrawFourAction) {
             int nextPlayer = currentNextPlayerIndex;
             state.hands.get(nextPlayer).addAll(state.draw(gameManager, 4));
             skipNextPlayer = true;
-            state.lastAction = Optional.of(action);
         }
 
+        state.lastAction = Optional.of(action);
         state.setNextPlayer(nextPlayerIndex(state.rotation, playerIndex, skipNextPlayer, gameManager.getPlayerCount()));
     }
 
