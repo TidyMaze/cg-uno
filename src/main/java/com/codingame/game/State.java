@@ -4,6 +4,7 @@ import com.codingame.gameengine.core.MultiplayerGameManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 public class State {
@@ -11,6 +12,8 @@ public class State {
     List<Card> discardPile;
 
     List<List<Card>> hands;
+
+    Optional<Action> lastAction = Optional.empty();
 
     public State(Deck deck, List<Card> discardPile, List<List<Card>> hands) {
         this.deck = deck;

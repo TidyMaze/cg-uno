@@ -40,7 +40,8 @@ public class GameEngine {
                 isSameSymbol(c, lastPlayed) ||
                 c instanceof WildCard ||
                 c instanceof WildDrawFourCard ||
-                (lastPlayed instanceof WildCard && cardColor.isPresent() && cardColor.get() == ((WildAction)lastPlayedAction).color) ||
+                (state.lastAction.isPresent() && state.lastAction.get() instanceof WildAction && cardColor.isPresent() && cardColor.get() == ((WildAction) state.lastAction.get()).color) ||
+                (state.lastAction.isPresent() && state.lastAction.get() instanceof WildDrawFourAction && cardColor.isPresent() && cardColor.get() == ((WildDrawFourAction) state.lastAction.get()).color);
     }
 
     private static boolean isSameColor(Card c1, Card c2) {
@@ -104,10 +105,16 @@ public class GameEngine {
             int nextPlayer = (playerIndex + 1) % gameManager.getPlayerCount();
             state.hands.get(nextPlayer).addAll(state.draw(gameManager, 2));
             state.setNextPlayer((nextPlayer + 1) % gameManager.getPlayerCount());
+            state.lastAction = Optional.of(action);
+        } else if (action instanceof WildAction) {
+            int nextPlayer = (playerIndex + 1) % gameManager.getPlayerCount();
+            state.setNextPlayer(nextPlayer);
+            state.lastAction = Optional.of(action);
         } else if (action instanceof WildDrawFourAction) {
             int nextPlayer = (playerIndex + 1) % gameManager.getPlayerCount();
             state.hands.get(nextPlayer).addAll(state.draw(gameManager, 4));
             state.setNextPlayer((nextPlayer + 1) % gameManager.getPlayerCount());
+            state.lastAction = Optional.of(action);
         }
     }
 }
