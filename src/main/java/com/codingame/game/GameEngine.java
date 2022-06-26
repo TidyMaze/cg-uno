@@ -112,8 +112,10 @@ public class GameEngine {
             int nextPlayer = currentNextPlayerIndex;
             state.hands.get(nextPlayer).addAll(state.draw(gameManager, 2));
             skipNextPlayer = true;
+            gameManager.addTooltip(gameManager.getPlayer(playerIndex), "Player " + (player.getNicknameToken()) + " played a +2");
         } else if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof SkipCard) {
             skipNextPlayer = true;
+            gameManager.addTooltip(gameManager.getPlayer(playerIndex), "Player " + (player.getNicknameToken()) + " played a Skip");
         } else if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof ReverseCard) {
             state.setRotation(state.rotation.equals(Rotation.CLOCKWISE) ? Rotation.COUNTER_CLOCKWISE : Rotation.CLOCKWISE);
         } else if (action instanceof WildAction) {
