@@ -94,6 +94,11 @@ public class Referee extends AbstractReferee {
 
                 boolean isValid = validActions.contains(action);
                 if (isValid) {
+                    if (hand.size() == 1) {
+                        System.out.println("Player " + player.getIndex() + " played the last card and won!");
+                        player.setScore(computeScore(state.hands, player.getIndex()));
+                        gameManager.endGame();
+                    }
                     GameEngine.playAction(state, player.getIndex(), action, gameManager);
                 } else {
                     player.deactivate("Invalid action " + action);
@@ -115,4 +120,39 @@ public class Referee extends AbstractReferee {
 
         // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
     }
+
+    private int computeScore(List<List<Card>> hands, int playerIndex) {
+        int score = 0;
+        for (int iHand = 0; iHand < hands.size(); iHand++) {
+            if (iHand == playerIndex) {
+                // skip the hand of winner
+            } else {
+                List<Card> hand = hands.get(iHand);
+                for (Card card : hand) {
+                    score += getCardScore(card);
+                }
+
+            }
+        }
+        return score;
+    }
+
+    private int getCardScore(Card card) {
+        if (card instanceof NumberCard) {
+            return ((NumberCard) card).getValue().intValue;
+        } else if (card instanceof DrawTwoCard) {
+            return 20;
+        } else if (card instanceof SkipCard) {
+            return 20;
+        } else if (card instanceof ReverseCard) {
+            return 20;
+        } else if (card instanceof WildCard) {
+            return 50;
+        } else if (card instanceof WildDrawFourCard) {
+            return 50;
+        } else {
+            throw new IllegalArgumentException("Unknown card type: " + card);
+        }
+    }
+
 }
