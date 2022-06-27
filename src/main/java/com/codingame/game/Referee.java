@@ -157,6 +157,9 @@ public class Referee extends AbstractReferee {
                 .setFillColor(0x35654d)
                 .setVisible(true);
 
+        drawCard(0, 0, new NumberCard(Color.BLUE, NumberCard.Value.ONE));
+        drawCard(width, height, new ReverseCard(Color.RED));
+
         for (int iHand = 0; iHand < state.hands.size(); iHand++) {
             List<Card> hand = state.hands.get(iHand);
             drawHand(hand, iHand);
@@ -180,7 +183,7 @@ public class Referee extends AbstractReferee {
     }
 
     private Coordinate getCenterOfHand(int playerIndex) {
-        int borderOffset = 100;
+        int borderOffset = 150;
         switch (playerIndex) {
             case 0:
                 // UP
@@ -208,8 +211,8 @@ public class Referee extends AbstractReferee {
                 .setLineWidth(5)
                 .setHeight(CARD_HEIGHT)
                 .setWidth(CARD_WIDTH)
-                .setX(x)
-                .setY(y)
+                .setX(x - CARD_WIDTH / 2)
+                .setY(y - CARD_HEIGHT / 2)
                 .setVisible(true);
 
         graphicEntityModule.createText(card.getDisplayText())
