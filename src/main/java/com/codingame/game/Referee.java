@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
 import com.codingame.gameengine.core.AbstractReferee;
 import com.codingame.gameengine.core.MultiplayerGameManager;
+import com.codingame.gameengine.module.entities.Circle;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
 import com.google.inject.Inject;
 
@@ -94,7 +95,7 @@ public class Referee extends AbstractReferee {
                     GameEngine.playAction(state, action, gameManager);
                     gameManager.addToGameSummary(String.format("%s played %s", player.getNicknameToken(), action));
 
-                    if (hand.size() == 1) {
+                    if (hand.size() == 0) {
                         gameManager.addTooltip(player, "Player " + player.getIndex() + " played the last card and won!");
                         player.setScore(computeScore(state.hands, player.getIndex()));
                         gameManager.endGame();
@@ -115,6 +116,8 @@ public class Referee extends AbstractReferee {
             }
         }
 
+        drawState();
+
         System.out.println(String.format("End of turn %d", turn));
 
         // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
@@ -134,5 +137,37 @@ public class Referee extends AbstractReferee {
             }
         }
         return score;
+    }
+
+    void drawState() {
+        Circle circle = graphicEntityModule.createCircle()
+                .setRadius(50)
+                .setLineWidth(0)
+                .setFillColor(0x00FF00)
+                .setX(70)
+                .setY(70)
+                .setVisible(true);
+
+        // show hello
+        graphicEntityModule.createText("Hello")
+                // red
+                .setFillColor(0xFF0000)
+                .setStrokeColor(0xFF0000)
+                .setText("Hello")
+                .setX(70)
+                .setY(70)
+                .setFontSize(20)
+                .setVisible(true);
+
+        graphicEntityModule.createText(state.toString())
+                .setFontFamily("Arial")
+                // red
+                .setFillColor(0xFF0000)
+                // white
+                .setStrokeColor(0xFFFFFF)
+                .setFontSize(20)
+                .setX(100)
+                .setY(100)
+                .setVisible(true);
     }
 }
