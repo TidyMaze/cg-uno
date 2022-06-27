@@ -55,6 +55,8 @@ public class Referee extends AbstractReferee {
         if (validActions.isEmpty()) {
             Card drawnCard = state.hands.get(player.getIndex()).get(state.hands.get(player.getIndex()).size() - 1);
             System.out.println(String.format("Player %d still have no valid action, skip turn", player.getIndex(), drawnCard));
+            int currentNextPlayerIndex = GameEngine.nextPlayerIndex(state.rotation, player.getIndex(), false, gameManager.getPlayerCount());
+            state.nextPlayer = currentNextPlayerIndex;
         } else {
             // Input line containing the hand of the player and last card in the discard pile
             List<Card> hand = state.hands.get(player.getIndex());
