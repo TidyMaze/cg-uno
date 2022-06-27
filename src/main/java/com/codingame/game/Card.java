@@ -38,6 +38,8 @@ interface Card {
     Optional<Color> getCardColor();
 
     int getScore();
+
+    String getDisplayText();
 }
 
 enum Color {

@@ -25,6 +25,11 @@ public class SkipCard implements Card {
         return 20;
     }
 
+    @Override
+    public String getDisplayText() {
+        return "SKIP";
+    }
+
     public Color getColor() {
         return color;
     }

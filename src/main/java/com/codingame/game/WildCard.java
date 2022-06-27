@@ -19,6 +19,11 @@ public class WildCard implements Card {
     }
 
     @Override
+    public String getDisplayText() {
+        return "WILD";
+    }
+
+    @Override
     public boolean equals(Object obj) {
         return obj instanceof WildCard;
     }

@@ -95,4 +95,9 @@ public class NumberCard implements Card {
     public int getScore() {
         return value.intValue;
     }
+
+    @Override
+    public String getDisplayText() {
+        return String.valueOf(value.intValue);
+    }
 }

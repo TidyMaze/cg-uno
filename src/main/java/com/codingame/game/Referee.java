@@ -245,6 +245,11 @@ public class Referee extends AbstractReferee {
                 .setX(x)
                 .setY(y)
                 .setVisible(true);
+
+        graphicEntityModule.createText(card.getDisplayText())
+                .setX(x)
+                .setY(y)
+                .setVisible(true);
     }
 }
 
