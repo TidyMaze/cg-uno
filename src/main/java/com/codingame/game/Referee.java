@@ -205,13 +205,13 @@ public class Referee extends AbstractReferee {
         int handRectangleWidth = hand.size() * CARD_WIDTH;
         int handRectangleHeight = CARD_HEIGHT;
 
-        int handRectangleX = center.x - (hand.size() * (CARD_WIDTH - 1) / 2);
-        int handRectangleY = center.y;
+        int handRectangleStartX = center.x - (handRectangleWidth - 1) / 2;
+        int handRectangleStartY = center.y - (handRectangleHeight - 1) / 2;
 
         Group g = graphicEntityModule.createGroup();
 
         for (int iCard = 0; iCard < hand.size(); iCard++) {
-            drawCard(handRectangleX + iCard * CARD_WIDTH, handRectangleY, hand.get(iCard));
+            drawCard(handRectangleStartX + iCard * CARD_WIDTH, handRectangleStartY, hand.get(iCard));
         }
     }
 
@@ -236,16 +236,14 @@ public class Referee extends AbstractReferee {
     }
 
     private void drawCard(int x, int y, Card card) {
-
-
         Optional<Integer> displayColor = card.getCardColor().map(color -> color.getDisplayColor());
 
         graphicEntityModule.createRoundedRectangle()
                 .setFillColor(displayColor.orElse(0x000000))
                 .setHeight(CARD_HEIGHT)
                 .setWidth(CARD_WIDTH)
-                .setX(x - CARD_WIDTH / 2)
-                .setY(y - CARD_HEIGHT / 2)
+                .setX(x)
+                .setY(y)
                 .setVisible(true);
     }
 }
