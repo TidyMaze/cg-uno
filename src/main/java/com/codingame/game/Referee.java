@@ -157,8 +157,17 @@ public class Referee extends AbstractReferee {
                 .setFillColor(0x3b9152)
                 .setVisible(true);
 
+        // calibration
         drawCard(0, 0, new NumberCard(Color.BLUE, NumberCard.Value.ONE));
         drawCard(width, height, new ReverseCard(Color.RED));
+
+        // draw the discard pile
+        int discardPileX = width / 2;
+        int discardPileY = height / 2;
+
+        if (!state.discardPile.isEmpty()) {
+            drawCard(discardPileX, discardPileY, state.discardPile.get(state.discardPile.size() - 1));
+        }
 
         for (int iHand = 0; iHand < state.hands.size(); iHand++) {
             List<Card> hand = state.hands.get(iHand);
