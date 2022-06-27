@@ -82,11 +82,8 @@ class Deck {
     }
 
     List<Card> draw(int count) {
-        System.out.println(String.format("BEFORE: Cards in deck: %d", cards.size()));
-        System.out.println(String.format("BEFORE: Drawing %d cards", count));
         ArrayList<Card> res = new ArrayList<>(cards.subList(0, count));
         cards = new ArrayList<>(cards.subList(count, cards.size()));
-        System.out.println(String.format("AFTER: Cards in deck: %d", cards.size()));
         return res;
     }
 
