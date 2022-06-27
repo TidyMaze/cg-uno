@@ -161,40 +161,6 @@ public class Referee extends AbstractReferee {
             List<Card> hand = state.hands.get(iHand);
             drawHand(hand, iHand);
         }
-
-        Circle circle = graphicEntityModule.createCircle()
-                .setRadius(50)
-                .setLineWidth(0)
-                .setFillColor(0x00FF00)
-                .setX(70)
-                .setY(70)
-                .setVisible(true);
-
-        // show hello
-        graphicEntityModule.createText("Hello")
-                // red
-                .setFillColor(0xFF0000)
-                .setStrokeColor(0xFF0000)
-                .setText("Hello")
-                .setX(70)
-                .setY(70)
-                .setFontSize(40)
-                .setVisible(true);
-
-        String stateStr = state.toString();
-
-        System.out.println(stateStr);
-
-        graphicEntityModule.createText(stateStr.substring(0, 10))
-                .setFontFamily("Lato")
-                // red
-                .setFillColor(0xFF0000)
-                // white
-                .setStrokeColor(0xFFFFFF)
-                .setFontSize(40)
-                .setX(100)
-                .setY(100)
-                .setVisible(true);
     }
 
     private void drawHand(List<Card> hand, int playerIndex) {
