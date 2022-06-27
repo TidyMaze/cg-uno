@@ -220,6 +220,7 @@ public class Referee extends AbstractReferee {
                 .setX(x)
                 .setY(y)
                 // white
+                .setFontSize(50)
                 .setFillColor(0xFFFFFF)
                 .setStrokeColor(0x000000)
                 .setStrokeThickness(5)

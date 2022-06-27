@@ -27,7 +27,7 @@ public class SkipCard implements Card {
 
     @Override
     public String getDisplayText() {
-        return "SKIP";
+        return "∅";
     }
 
     public Color getColor() {

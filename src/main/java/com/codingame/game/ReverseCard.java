@@ -28,7 +28,7 @@ public class ReverseCard implements Card {
 
     @Override
     public String getDisplayText() {
-        return "REVERSE";
+        return "\uD83D\uDD04";
     }
 
     public Color getColor() {

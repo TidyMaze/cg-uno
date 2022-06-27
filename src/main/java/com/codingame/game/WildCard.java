@@ -20,7 +20,7 @@ public class WildCard implements Card {
 
     @Override
     public String getDisplayText() {
-        return "WILD";
+        return "\uD83C\uDFA8";
     }
 
     @Override
