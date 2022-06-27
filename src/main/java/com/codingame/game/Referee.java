@@ -240,6 +240,8 @@ public class Referee extends AbstractReferee {
 
         graphicEntityModule.createRoundedRectangle()
                 .setFillColor(displayColor.orElse(0x000000))
+                .setLineColor(0xFFFFFF)
+                .setLineWidth(5)
                 .setHeight(CARD_HEIGHT)
                 .setWidth(CARD_WIDTH)
                 .setX(x)
@@ -249,6 +251,10 @@ public class Referee extends AbstractReferee {
         graphicEntityModule.createText(card.getDisplayText())
                 .setX(x)
                 .setY(y)
+                // white
+                .setFillColor(0xFFFFFF)
+                .setStrokeColor(0x000000)
+                .setStrokeThickness(5)
                 .setVisible(true);
     }
 }
