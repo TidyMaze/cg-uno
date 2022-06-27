@@ -13,6 +13,7 @@ import com.google.inject.Inject;
 
 import static com.codingame.game.GraphicsConstants.CARD_HEIGHT;
 import static com.codingame.game.GraphicsConstants.CARD_WIDTH;
+import static com.codingame.gameengine.module.entities.TextBasedEntity.TextAlign.CENTER;
 
 public class Referee extends AbstractReferee {
     @Inject
@@ -248,7 +249,7 @@ public class Referee extends AbstractReferee {
         graphicEntityModule.createText(card.getDisplayText())
                 .setX(x)
                 .setY(y)
-                .setTextAlign(TextBasedEntity.TextAlign.CENTER)
+                .setTextAlign(CENTER)
                 // white
                 .setFillColor(0xFFFFFF)
                 .setStrokeColor(0x000000)
