@@ -170,7 +170,7 @@ public class Referee extends AbstractReferee {
         }
 
         // draw the deck pile
-        int deckPileX = width / 2 - CARD_WIDTH * 2;
+        int deckPileX = width / 2 - CARD_WIDTH - 20;
         int deckPileY = height / 2;
 
         if (!state.deck.isEmpty()) {
@@ -248,6 +248,13 @@ public class Referee extends AbstractReferee {
                 .setWidth(CARD_WIDTH)
                 .setX(x - CARD_WIDTH / 2)
                 .setY(y - CARD_HEIGHT / 2)
+                .setVisible(true);
+
+        graphicEntityModule.createCircle()
+                .setFillColor(0xFF0000)
+                .setRadius(CARD_WIDTH / 2 - 10)
+                .setX(x)
+                .setY(y)
                 .setVisible(true);
 
         graphicEntityModule.createText(String.format("%d", count))
