@@ -154,7 +154,7 @@ public class Referee extends AbstractReferee {
                 .setHeight(height)
                 .setWidth(width)
                 // poker green background
-                .setFillColor(0x35654d)
+                .setFillColor(0x3b9152)
                 .setVisible(true);
 
         drawCard(0, 0, new NumberCard(Color.BLUE, NumberCard.Value.ONE));

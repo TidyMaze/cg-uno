@@ -66,13 +66,13 @@ enum Color {
     public int getDisplayColor() {
         switch (this) {
             case RED:
-                return 0xFF0000;
+                return 0xd60000;
             case BLUE:
-                return 0x0000FF;
+                return 0x0052b1;
             case GREEN:
-                return 0x00CC00;
+                return 0x008e00;
             case YELLOW:
-                return 0xFFFF00;
+                return 0xead100;
             default:
                 throw new IllegalArgumentException("Unknown color: " + this);
         }
