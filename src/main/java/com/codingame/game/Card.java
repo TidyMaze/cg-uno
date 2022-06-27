@@ -70,7 +70,7 @@ enum Color {
             case BLUE:
                 return 0x0000FF;
             case GREEN:
-                return 0x00FF00;
+                return 0x00CC00;
             case YELLOW:
                 return 0xFFFF00;
             default:
