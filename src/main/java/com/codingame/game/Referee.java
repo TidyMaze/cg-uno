@@ -8,10 +8,7 @@ import java.util.Optional;
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
 import com.codingame.gameengine.core.AbstractReferee;
 import com.codingame.gameengine.core.MultiplayerGameManager;
-import com.codingame.gameengine.module.entities.Circle;
-import com.codingame.gameengine.module.entities.GraphicEntityModule;
-import com.codingame.gameengine.module.entities.Group;
-import com.codingame.gameengine.module.entities.World;
+import com.codingame.gameengine.module.entities.*;
 import com.google.inject.Inject;
 
 import static com.codingame.game.GraphicsConstants.CARD_HEIGHT;
@@ -251,6 +248,7 @@ public class Referee extends AbstractReferee {
         graphicEntityModule.createText(card.getDisplayText())
                 .setX(x)
                 .setY(y)
+                .setTextAlign(TextBasedEntity.TextAlign.CENTER)
                 // white
                 .setFillColor(0xFFFFFF)
                 .setStrokeColor(0x000000)
