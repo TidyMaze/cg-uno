@@ -168,17 +168,12 @@ public class Referee extends AbstractReferee {
 
     private void drawHand(List<Card> hand, int playerIndex) {
         Coordinate center = getCenterOfHand(playerIndex);
-
-        int handRectangleWidth = hand.size() * CARD_WIDTH;
-        int handRectangleHeight = CARD_HEIGHT;
-
-        int handRectangleStartX = center.x - (handRectangleWidth - 1) / 2;
-        int handRectangleStartY = center.y - (handRectangleHeight - 1) / 2;
+        int handRectangleStartX = center.x - ((hand.size() - 1) * CARD_WIDTH) / 2;
 
         Group g = graphicEntityModule.createGroup();
 
         for (int iCard = 0; iCard < hand.size(); iCard++) {
-            drawCard(handRectangleStartX + iCard * CARD_WIDTH, handRectangleStartY, hand.get(iCard));
+            drawCard(handRectangleStartX + iCard * CARD_WIDTH, center.y, hand.get(iCard));
         }
     }
 
