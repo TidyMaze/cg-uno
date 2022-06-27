@@ -216,9 +216,9 @@ public class Referee extends AbstractReferee {
                 .setVisible(true);
 
         graphicEntityModule.createText(card.getDisplayText())
-                .setX(x + CARD_WIDTH / 2)
-                .setY(y + CARD_HEIGHT / 2)
                 .setTextAlign(CENTER)
+                .setX(x)
+                .setY(y)
                 // white
                 .setFillColor(0xFFFFFF)
                 .setStrokeColor(0x000000)
