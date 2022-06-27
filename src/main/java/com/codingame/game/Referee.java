@@ -2,6 +2,7 @@ package com.codingame.game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
@@ -9,7 +10,12 @@ import com.codingame.gameengine.core.AbstractReferee;
 import com.codingame.gameengine.core.MultiplayerGameManager;
 import com.codingame.gameengine.module.entities.Circle;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
+import com.codingame.gameengine.module.entities.Group;
+import com.codingame.gameengine.module.entities.World;
 import com.google.inject.Inject;
+
+import static com.codingame.game.GraphicsConstants.CARD_HEIGHT;
+import static com.codingame.game.GraphicsConstants.CARD_WIDTH;
 
 public class Referee extends AbstractReferee {
     @Inject
@@ -142,6 +148,22 @@ public class Referee extends AbstractReferee {
     }
 
     void drawState() {
+        World world = graphicEntityModule.getWorld();
+        int width = world.getWidth();
+        int height = world.getHeight();
+
+        graphicEntityModule.createRectangle()
+                .setHeight(height)
+                .setWidth(width)
+                // poker green background
+                .setFillColor(0x35654d)
+                .setVisible(true);
+
+        for (int iHand = 0; iHand < state.hands.size(); iHand++) {
+            List<Card> hand = state.hands.get(iHand);
+            drawHand(hand, iHand);
+        }
+
         Circle circle = graphicEntityModule.createCircle()
                 .setRadius(50)
                 .setLineWidth(0)
@@ -158,18 +180,87 @@ public class Referee extends AbstractReferee {
                 .setText("Hello")
                 .setX(70)
                 .setY(70)
-                .setFontSize(20)
+                .setFontSize(40)
                 .setVisible(true);
 
-        graphicEntityModule.createText(state.toString())
-                .setFontFamily("Arial")
+        String stateStr = state.toString();
+
+        System.out.println(stateStr);
+
+        graphicEntityModule.createText(stateStr.substring(0, 10))
+                .setFontFamily("Lato")
                 // red
                 .setFillColor(0xFF0000)
                 // white
                 .setStrokeColor(0xFFFFFF)
-                .setFontSize(20)
+                .setFontSize(40)
                 .setX(100)
                 .setY(100)
                 .setVisible(true);
     }
+
+    private void drawHand(List<Card> hand, int playerIndex) {
+        Coordinate center = getCenterOfHand(playerIndex);
+
+        int handRectangleWidth = hand.size() * CARD_WIDTH;
+        int handRectangleHeight = CARD_HEIGHT;
+
+        int handRectangleX = center.x - (hand.size() * (CARD_WIDTH - 1) / 2);
+        int handRectangleY = center.y;
+
+        Group g = graphicEntityModule.createGroup();
+
+        for (int iCard = 0; iCard < hand.size(); iCard++) {
+            drawCard(handRectangleX + iCard * CARD_WIDTH, handRectangleY, hand.get(iCard));
+        }
+    }
+
+    private Coordinate getCenterOfHand(int playerIndex) {
+        int borderOffset = 100;
+        switch (playerIndex) {
+            case 0:
+                // UP
+                return new Coordinate(graphicEntityModule.getWorld().getWidth() / 2, borderOffset);
+            case 1:
+                // RIGHT
+                return new Coordinate(graphicEntityModule.getWorld().getWidth() - borderOffset, graphicEntityModule.getWorld().getHeight() / 2);
+            case 2:
+                // DOWN
+                return new Coordinate(graphicEntityModule.getWorld().getWidth() / 2, graphicEntityModule.getWorld().getHeight() - borderOffset);
+            case 3:
+                // LEFT
+                return new Coordinate(borderOffset, graphicEntityModule.getWorld().getHeight() / 2);
+            default:
+                throw new IllegalArgumentException("Invalid player index");
+        }
+    }
+
+    private void drawCard(int x, int y, Card card) {
+
+
+        Optional<Integer> displayColor = card.getCardColor().map(color -> color.getDisplayColor());
+
+        graphicEntityModule.createRoundedRectangle()
+                .setFillColor(displayColor.orElse(0x000000))
+                .setHeight(CARD_HEIGHT)
+                .setWidth(CARD_WIDTH)
+                .setX(x - CARD_WIDTH / 2)
+                .setY(y - CARD_HEIGHT / 2)
+                .setVisible(true);
+    }
+}
+
+class Coordinate {
+    int x;
+    int y;
+
+    public Coordinate(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+class GraphicsConstants {
+    static int CARD_WIDTH = 100;
+    static int CARD_HEIGHT = (int) (CARD_WIDTH * 1.58);
 }

@@ -60,4 +60,19 @@ enum Color {
                 throw new IllegalArgumentException("Unknown color: " + color);
         }
     }
+
+    public int getDisplayColor() {
+        switch (this) {
+            case RED:
+                return 0xFF0000;
+            case BLUE:
+                return 0x0000FF;
+            case GREEN:
+                return 0x00FF00;
+            case YELLOW:
+                return 0xFFFF00;
+            default:
+                throw new IllegalArgumentException("Unknown color: " + this);
+        }
+    }
 }
