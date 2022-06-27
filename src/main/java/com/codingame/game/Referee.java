@@ -169,6 +169,14 @@ public class Referee extends AbstractReferee {
             drawCard(discardPileX, discardPileY, state.discardPile.get(state.discardPile.size() - 1));
         }
 
+        // draw the deck pile
+        int deckPileX = width / 2 - CARD_WIDTH * 2;
+        int deckPileY = height / 2;
+
+        if (!state.deck.isEmpty()) {
+            drawDeck(deckPileX, deckPileY, state.deck.size());
+        }
+
         for (int iHand = 0; iHand < state.hands.size(); iHand++) {
             List<Card> hand = state.hands.get(iHand);
             drawHand(hand, iHand);
@@ -220,6 +228,29 @@ public class Referee extends AbstractReferee {
                 .setVisible(true);
 
         graphicEntityModule.createText(card.getDisplayText())
+                .setTextAlign(CENTER)
+                .setX(x)
+                .setY(y)
+                // white
+                .setFontSize(50)
+                .setFillColor(0xFFFFFF)
+                .setStrokeColor(0x000000)
+                .setStrokeThickness(5)
+                .setVisible(true);
+    }
+
+    private void drawDeck(int x, int y, int count) {
+        graphicEntityModule.createRoundedRectangle()
+                .setFillColor(0x010101)
+                .setLineColor(0xFFFFFF)
+                .setLineWidth(5)
+                .setHeight(CARD_HEIGHT)
+                .setWidth(CARD_WIDTH)
+                .setX(x - CARD_WIDTH / 2)
+                .setY(y - CARD_HEIGHT / 2)
+                .setVisible(true);
+
+        graphicEntityModule.createText(String.format("%d", count))
                 .setTextAlign(CENTER)
                 .setX(x)
                 .setY(y)
