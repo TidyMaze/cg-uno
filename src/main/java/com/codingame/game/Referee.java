@@ -94,14 +94,12 @@ public class Referee extends AbstractReferee {
             try {
                 List<String> outputs = player.getOutputs();
                 if (outputs.size() != 1) {
-                    player.deactivate("Too many output lines!");
-                    player.setScore(-1);
+                    disqualifyPlayer(player, "Too many output lines!");
                 }
 
                 String line = outputs.get(0);
                 if (line.isEmpty()) {
-                    player.deactivate("Empty line");
-                    player.setScore(-1);
+                    disqualifyPlayer(player, "Empty line");
                 }
 
                 Action action = parseAction(line);
@@ -117,16 +115,12 @@ public class Referee extends AbstractReferee {
                         onVictory(player);
                     }
                 } else {
-                    player.deactivate("Invalid action " + action);
-                    player.setScore(-1);
+                    disqualifyPlayer(player, "Invalid action " + action);
                 }
             } catch (TimeoutException e) {
-                player.deactivate(String.format("$%d timeout!", player.getIndex()));
-                player.setScore(-1);
-                gm.endGame();
+                disqualifyPlayer(player, String.format("$%d timeout!", player.getIndex()));
             } catch (IllegalArgumentException e) {
-                player.deactivate("Invalid action " + e.getMessage());
-                player.setScore(-1);
+                disqualifyPlayer(player, "Invalid action " + e.getMessage());
             } catch (NotEnoughCardsException e) {
                 gm.endGame();
             }
@@ -137,6 +131,11 @@ public class Referee extends AbstractReferee {
         System.out.printf("End of turn %d%n", turn);
 
         // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
+    }
+
+    private static void disqualifyPlayer(Player player, String action) {
+        player.deactivate(action);
+        player.setScore(-1);
     }
 
     private static boolean playerWon(List<Card> hand) {
