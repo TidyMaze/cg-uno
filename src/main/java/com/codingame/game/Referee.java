@@ -73,10 +73,7 @@ public class Referee extends AbstractReferee {
         }
 
         graphics.drawState(state);
-
         System.out.printf("End of turn %d%n", turn);
-
-        // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
     }
 
     private void doOnePlayerTurn(int playerCount, Player player, List<Action> validActions) {
