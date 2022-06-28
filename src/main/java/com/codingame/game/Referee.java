@@ -35,10 +35,12 @@ public class Referee extends AbstractReferee {
     Consumer<Integer> onSkip = tooltipHandler("Skip");
     Consumer<Integer> onReverse = tooltipHandler("Reverse");
     Consumer<Integer> onWildDrawFour = tooltipHandler("+4");
+    private Random random;
 
     @Override
     public void init() {
         this.graphics = new Display(graphicEntityModule);
+        this.random = gm.getRandom();
 
         gm.setMaxTurns(200);
 
@@ -58,9 +60,6 @@ public class Referee extends AbstractReferee {
     @Override
     public void gameTurn(int turn) {
         System.out.printf("Turn %d%n", turn);
-
-
-        Random random = gm.getRandom();
         int playerCount = gm.getPlayerCount();
         Player player = gm.getPlayer(state.nextPlayer);
 
@@ -69,7 +68,7 @@ public class Referee extends AbstractReferee {
         if (validActions.isEmpty()) {
             skipTurnStillCannotPlayAfterRedraw(playerCount, player);
         } else {
-            doOnePlayerTurn(random, playerCount, player, validActions);
+            doOnePlayerTurn(playerCount, player, validActions);
         }
 
         graphics.drawState(state);
@@ -79,7 +78,7 @@ public class Referee extends AbstractReferee {
         // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
     }
 
-    private void doOnePlayerTurn(Random random, int playerCount, Player player, List<Action> validActions) {
+    private void doOnePlayerTurn(int playerCount, Player player, List<Action> validActions) {
         List<Card> hand = state.hands.get(player.getIndex());
         sendInputLines(player, validActions, hand);
         player.execute();
