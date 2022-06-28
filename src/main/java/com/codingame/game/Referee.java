@@ -37,28 +37,33 @@ public class Referee extends AbstractReferee {
     @Override
     public void init() {
         this.graphics = new Display(graphicEntityModule);
-        Random random = gm.getRandom();
-
         gm.setMaxTurns(200);
 
-        Deck deck = Deck.buildDeck();
-        deck.shuffle(gm.getRandom());
-
-        List<List<Card>> hands = new ArrayList<>();
         int playerCount = gm.getPlayerCount();
 
-        for (int i = 0; i < playerCount; i++) {
-            hands.add(deck.draw(7));
-        }
-
-        state = new State(deck, new ArrayList<>(), hands);
-        state.drawToDiscardPile();
+        this.state = initializeState(playerCount);
         System.out.println(state.toString());
 
         GameEngineListener listener = new CodingameGameEngineListener(gm);
         gameEngine = new GameEngine(playerCount, gm.getRandom(), listener);
 
 
+    }
+
+    private State initializeState(int playerCount) {
+        Deck deck = Deck.buildDeck();
+        deck.shuffle(gm.getRandom());
+
+
+        List<List<Card>> hands = new ArrayList<>();
+        for (int i = 0; i < playerCount; i++) {
+            hands.add(deck.draw(7));
+        }
+
+        state = new State(deck, new ArrayList<>(), hands);
+        state.drawToDiscardPile();
+
+        return state;
     }
 
     @Override
