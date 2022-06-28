@@ -48,6 +48,11 @@ enum Color {
     GREEN,
     YELLOW;
 
+    public static final int RED_CARD_COLOR = 0xd60000;
+    public static final int BLUE_CARD_COLOR = 0x0052b1;
+    public static final int GREEN_CARD_COLOR = 0x008e00;
+    public static final int YELLOW_CARD_COLOR = 0xead100;
+
     public static Color parse(String color) {
         switch (color) {
             case "RED":
@@ -66,13 +71,13 @@ enum Color {
     public int getDisplayColor() {
         switch (this) {
             case RED:
-                return 0xd60000;
+                return RED_CARD_COLOR;
             case BLUE:
-                return 0x0052b1;
+                return BLUE_CARD_COLOR;
             case GREEN:
-                return 0x008e00;
+                return GREEN_CARD_COLOR;
             case YELLOW:
-                return 0xead100;
+                return YELLOW_CARD_COLOR;
             default:
                 throw new IllegalArgumentException("Unknown color: " + this);
         }

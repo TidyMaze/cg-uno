@@ -16,6 +16,11 @@ import static com.codingame.game.GraphicsConstants.CARD_WIDTH;
 import static com.codingame.gameengine.module.entities.TextBasedEntity.TextAlign.CENTER;
 
 public class Referee extends AbstractReferee {
+    public static final int BLACK = 0x000000;
+    public static final int WHITE = 0xFFFFFF;
+    public static final int CARD_BACK_COLOR = 0x010101;
+    public static final int RED = 0xFF0000;
+    public static final int BACKGROUND_COLOR = 0x3b9152;
     @Inject
     private MultiplayerGameManager<Player> gameManager;
     @Inject
@@ -155,7 +160,7 @@ public class Referee extends AbstractReferee {
                 .setHeight(height)
                 .setWidth(width)
                 // poker green background
-                .setFillColor(0x3b9152)
+                .setFillColor(BACKGROUND_COLOR)
                 .setVisible(true);
 
         // calibration
@@ -251,8 +256,8 @@ public class Referee extends AbstractReferee {
         Group g = graphicEntityModule.createGroup();
 
         RoundedRectangle c = graphicEntityModule.createRoundedRectangle()
-                .setFillColor(displayColor.orElse(0x000000))
-                .setLineColor(0xFFFFFF)
+                .setFillColor(displayColor.orElse(BLACK))
+                .setLineColor(WHITE)
                 .setLineWidth(5)
                 .setHeight(CARD_HEIGHT)
                 .setWidth(CARD_WIDTH)
@@ -266,8 +271,8 @@ public class Referee extends AbstractReferee {
                 .setY(y - 30)
                 // white
                 .setFontSize(50)
-                .setFillColor(0xFFFFFF)
-                .setStrokeColor(0x000000)
+                .setFillColor(WHITE)
+                .setStrokeColor(BLACK)
                 .setStrokeThickness(5)
                 .setZIndex(10)
                 .setVisible(true);
@@ -279,8 +284,8 @@ public class Referee extends AbstractReferee {
 
     private void drawDeck(int x, int y, int count) {
         graphicEntityModule.createRoundedRectangle()
-                .setFillColor(0x010101)
-                .setLineColor(0xFFFFFF)
+                .setFillColor(CARD_BACK_COLOR)
+                .setLineColor(WHITE)
                 .setLineWidth(5)
                 .setHeight(CARD_HEIGHT)
                 .setWidth(CARD_WIDTH)
@@ -289,7 +294,7 @@ public class Referee extends AbstractReferee {
                 .setVisible(true);
 
         graphicEntityModule.createCircle()
-                .setFillColor(0xFF0000)
+                .setFillColor(RED)
                 .setRadius(CARD_WIDTH / 2 - 10)
                 .setX(x)
                 .setY(y)
@@ -301,8 +306,8 @@ public class Referee extends AbstractReferee {
                 .setY(y - 30)
                 // white
                 .setFontSize(50)
-                .setFillColor(0xFFFFFF)
-                .setStrokeColor(0x000000)
+                .setFillColor(WHITE)
+                .setStrokeColor(BLACK)
                 .setStrokeThickness(5)
                 .setVisible(true);
     }
