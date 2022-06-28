@@ -3,8 +3,6 @@ package com.codingame.game;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-import java.util.function.Consumer;
 
 import com.codingame.game.graphics.Display;
 import com.codingame.game.io.Serializers;
@@ -42,7 +40,7 @@ public class Referee extends AbstractReferee {
         int playerCount = gm.getPlayerCount();
 
         this.state = initializeState(playerCount);
-        System.out.println(state.toString());
+        System.out.println(state);
 
         GameEngineListener listener = new CodingameGameEngineListener(gm);
         gameEngine = new GameEngine(playerCount, gm.getRandom(), listener);
@@ -60,7 +58,7 @@ public class Referee extends AbstractReferee {
             hands.add(deck.draw(7));
         }
 
-        state = new State(deck, new ArrayList<>(), hands);
+        State state = new State(deck, new ArrayList<>(), hands);
         state.drawToDiscardPile();
 
         return state;
@@ -147,8 +145,7 @@ public class Referee extends AbstractReferee {
             disqualifyPlayer(player, "Empty line");
         }
 
-        Action action = parseAction(line);
-        return action;
+        return parseAction(line);
     }
 
     private void sendInputLines(Player player, List<Action> validActions, List<Card> hand) {
