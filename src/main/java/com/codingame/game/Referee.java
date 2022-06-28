@@ -34,8 +34,6 @@ public class Referee extends AbstractReferee {
 
     GameEngine gameEngine;
 
-    GameEngineListener listener;
-
     private Random random;
     private int playerCount;
 
@@ -60,7 +58,7 @@ public class Referee extends AbstractReferee {
         state.drawToDiscardPile();
         System.out.println(state.toString());
 
-        listener = new CodingameGameEngineListener(gm);
+        GameEngineListener listener = new CodingameGameEngineListener(gm);
         gameEngine = new GameEngine(playerCount, gm.getRandom(), listener);
 
 
