@@ -28,13 +28,13 @@ public class Referee extends AbstractReferee {
 
     private State state;
 
-    Display graphics;
+    Display display;
 
     GameEngine gameEngine;
 
     @Override
     public void init() {
-        this.graphics = new Display(graphicEntityModule);
+        this.display = new Display(graphicEntityModule);
         gm.setMaxTurns(200);
 
         int playerCount = gm.getPlayerCount();
@@ -77,7 +77,7 @@ public class Referee extends AbstractReferee {
         } else {
             System.out.printf("Turn %d%n", turn);
             doOnePlayerTurn(player, validActions);
-            graphics.drawState(state);
+            display.drawState(state);
             System.out.printf("End of turn %d%n", turn);
         }
 
