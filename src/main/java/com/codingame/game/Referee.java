@@ -31,6 +31,11 @@ public class Referee extends AbstractReferee {
 
     Display graphics;
 
+    Consumer<Integer> onDrawTwo = tooltipHandler("+2");
+    Consumer<Integer> onSkip = tooltipHandler("Skip");
+    Consumer<Integer> onReverse = tooltipHandler("Reverse");
+    Consumer<Integer> onWildDrawFour = tooltipHandler("+4");
+
     @Override
     public void init() {
         this.graphics = new Display(graphicEntityModule);
@@ -54,10 +59,6 @@ public class Referee extends AbstractReferee {
     public void gameTurn(int turn) {
         System.out.printf("Turn %d%n", turn);
 
-        Consumer<Integer> onDrawTwo = tooltipHandler("+2");
-        Consumer<Integer> onSkip = tooltipHandler("Skip");
-        Consumer<Integer> onReverse = tooltipHandler("Reverse");
-        Consumer<Integer> onWildDrawFour = tooltipHandler("+4");
 
         Random random = gm.getRandom();
         int playerCount = gm.getPlayerCount();
@@ -68,7 +69,7 @@ public class Referee extends AbstractReferee {
         if (validActions.isEmpty()) {
             skipTurnStillCannotPlayAfterRedraw(playerCount, player);
         } else {
-            doOnePlayerTurn(onDrawTwo, onSkip, onReverse, onWildDrawFour, random, playerCount, player, validActions);
+            doOnePlayerTurn(random, playerCount, player, validActions);
         }
 
         graphics.drawState(state);
@@ -78,7 +79,7 @@ public class Referee extends AbstractReferee {
         // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
     }
 
-    private void doOnePlayerTurn(Consumer<Integer> onDrawTwo, Consumer<Integer> onSkip, Consumer<Integer> onReverse, Consumer<Integer> onWildDrawFour, Random random, int playerCount, Player player, List<Action> validActions) {
+    private void doOnePlayerTurn(Random random, int playerCount, Player player, List<Action> validActions) {
         List<Card> hand = state.hands.get(player.getIndex());
         sendInputLines(player, validActions, hand);
         player.execute();
