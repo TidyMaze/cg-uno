@@ -9,7 +9,6 @@ import com.codingame.gameengine.module.entities.*;
 import java.util.List;
 import java.util.Optional;
 
-import static com.codingame.game.graphics.GraphicsConstants.*;
 import static com.codingame.gameengine.module.entities.TextBasedEntity.TextAlign.CENTER;
 
 public class Display {
@@ -19,6 +18,14 @@ public class Display {
     public static final int BLUE_CARD_COLOR = 0x0052b1;
     public static final int GREEN_CARD_COLOR = 0x008e00;
     public static final int YELLOW_CARD_COLOR = 0xead100;
+
+    static int CARD_WIDTH = 100;
+    static int CARD_HEIGHT = (int) (CARD_WIDTH * 1.58);
+    public static final int BLACK = 0x000000;
+    public static final int WHITE = 0xFFFFFF;
+    public static final int CARD_BACK_COLOR = 0x010101;
+    public static final int RED = 0xFF0000;
+    public static final int BACKGROUND_COLOR = 0x3b9152;
 
     public Display(GraphicEntityModule graphicEntityModule) {
         this.graphicEntityModule = graphicEntityModule;
