@@ -104,7 +104,7 @@ public class Referee extends AbstractReferee {
 
                 boolean isValid = validActions.contains(action);
                 if (isValid) {
-                    GameEngine.playAction(state, action, gameManager);
+                    GameEngine.playAction(state, action, gameManager, (playerIndex1, player1) -> gameManager.addTooltip(gameManager.getPlayer(playerIndex1), (player1.getNicknameToken()) + " played a +2"), (playerIndex1, player1) -> gameManager.addTooltip(gameManager.getPlayer(playerIndex1), (player1.getNicknameToken()) + " played a Skip"), (playerIndex1, player1) -> gameManager.addTooltip(gameManager.getPlayer(playerIndex1), (player1.getNicknameToken()) + " played a reverse"), (playerIndex1, player1) -> gameManager.addTooltip(gameManager.getPlayer(playerIndex1), (player1.getNicknameToken()) + " played a +4"));
                     gameManager.addToGameSummary(String.format("%s played %s", player.getNicknameToken(), action));
 
                     if (hand.size() == 0) {

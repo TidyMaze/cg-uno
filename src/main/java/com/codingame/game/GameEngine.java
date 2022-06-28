@@ -13,6 +13,7 @@ import com.codingame.gameengine.core.MultiplayerGameManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 public class GameEngine {
     static List<Action> getValidActions(State state, int currentPlayer) {
@@ -44,12 +45,7 @@ public class GameEngine {
 
         Optional<Color> cardColor = c.getCardColor();
 
-        return isSameColor(lastPlayed, c) ||
-                isSameSymbol(c, lastPlayed) ||
-                c instanceof WildCard ||
-                c instanceof WildDrawFourCard ||
-                (state.lastAction.isPresent() && state.lastAction.get() instanceof WildAction && cardColor.isPresent() && cardColor.get() == ((WildAction) state.lastAction.get()).color) ||
-                (state.lastAction.isPresent() && state.lastAction.get() instanceof WildDrawFourAction && cardColor.isPresent() && cardColor.get() == ((WildDrawFourAction) state.lastAction.get()).color);
+        return isSameColor(lastPlayed, c) || isSameSymbol(c, lastPlayed) || c instanceof WildCard || c instanceof WildDrawFourCard || (state.lastAction.isPresent() && state.lastAction.get() instanceof WildAction && cardColor.isPresent() && cardColor.get() == ((WildAction) state.lastAction.get()).color) || (state.lastAction.isPresent() && state.lastAction.get() instanceof WildDrawFourAction && cardColor.isPresent() && cardColor.get() == ((WildDrawFourAction) state.lastAction.get()).color);
     }
 
     private static boolean isSameColor(Card c1, Card c2) {
@@ -78,7 +74,7 @@ public class GameEngine {
         return false;
     }
 
-    public static void playAction(State state, Action action, MultiplayerGameManager gameManager) {
+    public static void playAction(State state, Action action, MultiplayerGameManager<Player> gameManager, BiConsumer<Integer, Player> onDrawTwo, BiConsumer<Integer, Player> onSkip, BiConsumer<Integer, Player> onReverse, BiConsumer<Integer, Player> onWildDrawFour) {
 
         int playerIndex = state.nextPlayer;
         Player player = (Player) gameManager.getPlayer(playerIndex);
@@ -105,18 +101,19 @@ public class GameEngine {
         if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof DrawTwoCard) {
             state.hands.get(currentNextPlayerIndex).addAll(state.draw(gameManager, 2));
             skipNextPlayer = true;
-            gameManager.addTooltip(gameManager.getPlayer(playerIndex), (player.getNicknameToken()) + " played a +2");
+            onDrawTwo.accept(playerIndex, player);
         } else if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof SkipCard) {
             skipNextPlayer = true;
-            gameManager.addTooltip(gameManager.getPlayer(playerIndex), (player.getNicknameToken()) + " played a Skip");
+            onSkip.accept(playerIndex, player);
         } else if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof ReverseCard) {
             state.setRotation(state.rotation.equals(Rotation.CLOCKWISE) ? Rotation.COUNTER_CLOCKWISE : Rotation.CLOCKWISE);
+            onReverse.accept(playerIndex, player);
         } else if (action instanceof WildAction) {
             // nothing
         } else if (action instanceof WildDrawFourAction) {
             state.hands.get(currentNextPlayerIndex).addAll(state.draw(gameManager, 4));
             skipNextPlayer = true;
-            gameManager.addTooltip(gameManager.getPlayer(playerIndex), (player.getNicknameToken()) + " played a +4");
+            onWildDrawFour.accept(playerIndex, player);
         }
 
         state.lastAction = Optional.of(action);
