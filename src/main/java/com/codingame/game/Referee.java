@@ -85,8 +85,7 @@ public class Referee extends AbstractReferee {
                 System.out.println("Player " + player.getIndex() + " played " + action);
                 System.out.println("Valid actions: " + validActions);
 
-                boolean isValid = validActions.contains(action);
-                if (isValid) {
+                if (isValid(validActions, action)) {
                     GameEngine.playAction(state, action, onDrawTwo, onSkip, onReverse, onWildDrawFour, playerCount, random);
                     onActionPlayed(player, action);
 
@@ -110,6 +109,10 @@ public class Referee extends AbstractReferee {
         System.out.printf("End of turn %d%n", turn);
 
         // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
+    }
+
+    private static boolean isValid(List<Action> validActions, Action action) {
+        return validActions.contains(action);
     }
 
     private static Action readPlayerAction(Player player) throws TimeoutException {
