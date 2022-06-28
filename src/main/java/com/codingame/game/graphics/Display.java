@@ -12,6 +12,8 @@ import java.util.Optional;
 import static com.codingame.gameengine.module.entities.TextBasedEntity.TextAlign.CENTER;
 
 public class Display {
+    private final int worldWidth;
+    private final int worldHeight;
     GraphicEntityModule graphicEntityModule;
 
     public static final int RED_CARD_COLOR = 0xd60000;
@@ -29,6 +31,8 @@ public class Display {
 
     public Display(GraphicEntityModule graphicEntityModule) {
         this.graphicEntityModule = graphicEntityModule;
+        this.worldWidth = graphicEntityModule.getWorld().getWidth();
+        this.worldHeight = graphicEntityModule.getWorld().getHeight();
     }
 
     public static int getDisplayColor(Color c) {
@@ -67,28 +71,25 @@ public class Display {
 
     public void drawState(State state) {
         System.out.println("Drawing state");
-        World world = graphicEntityModule.getWorld();
-        int width = world.getWidth();
-        int height = world.getHeight();
 
         graphicEntityModule.createRectangle()
-                .setHeight(height)
-                .setWidth(width)
+                .setHeight(worldHeight)
+                .setWidth(worldWidth)
                 .setFillColor(BACKGROUND_COLOR)
                 .setVisible(true);
 
         // calibration
         drawCard(0, 0, new NumberCard(Color.BLUE, NumberCard.Value.ONE));
-        drawCard(width, height, new ReverseCard(Color.RED));
+        drawCard(worldWidth, worldHeight, new ReverseCard(Color.RED));
 
-        int discardPileX = width / 2;
-        int discardPileY = height / 2;
+        int discardPileX = worldWidth / 2;
+        int discardPileY = worldHeight / 2;
         if (!state.discardPile.isEmpty()) {
             drawCard(discardPileX, discardPileY, state.discardPile.get(state.discardPile.size() - 1));
         }
 
-        int deckPileX = width / 2 - CARD_WIDTH - 20;
-        int deckPileY = height / 2;
+        int deckPileX = worldWidth / 2 - CARD_WIDTH - 20;
+        int deckPileY = worldHeight / 2;
 
         if (!state.deck.isEmpty()) {
             drawDeck(deckPileX, deckPileY, state.deck.size());
@@ -146,16 +147,16 @@ public class Display {
         switch (playerIndex) {
             case 0:
                 // UP
-                return new Coordinate(graphicEntityModule.getWorld().getWidth() / 2, borderOffset);
+                return new Coordinate(worldWidth / 2, borderOffset);
             case 1:
                 // RIGHT
-                return new Coordinate(graphicEntityModule.getWorld().getWidth() - borderOffset, graphicEntityModule.getWorld().getHeight() / 2);
+                return new Coordinate(worldWidth - borderOffset, worldHeight / 2);
             case 2:
                 // DOWN
-                return new Coordinate(graphicEntityModule.getWorld().getWidth() / 2, graphicEntityModule.getWorld().getHeight() - borderOffset);
+                return new Coordinate(worldWidth / 2, worldHeight - borderOffset);
             case 3:
                 // LEFT
-                return new Coordinate(borderOffset, graphicEntityModule.getWorld().getHeight() / 2);
+                return new Coordinate(borderOffset, worldHeight / 2);
             default:
                 throw new IllegalArgumentException("Invalid player index");
         }
