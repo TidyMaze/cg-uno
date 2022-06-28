@@ -107,7 +107,7 @@ public class GameEngine {
 
         boolean skipNextPlayer = false;
 
-        int currentNextPlayerIndex = nextPlayerIndex(state.rotation, playerIndex, false, playerCount);
+        int currentNextPlayerIndex = nextPlayerIndex(state.rotation, playerIndex, false);
 
         if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof DrawTwoCard) {
             state.hands.get(currentNextPlayerIndex).addAll(state.draw(2, random));
@@ -128,10 +128,10 @@ public class GameEngine {
         }
 
         state.lastAction = Optional.of(action);
-        state.setNextPlayer(nextPlayerIndex(state.rotation, playerIndex, skipNextPlayer, playerCount));
+        state.setNextPlayer(nextPlayerIndex(state.rotation, playerIndex, skipNextPlayer));
     }
 
-    static int nextPlayerIndex(Rotation rotation, int playerIndex, boolean firstSkipped, int playerCount) {
+    int nextPlayerIndex(Rotation rotation, int playerIndex, boolean firstSkipped) {
         int res = (playerIndex + (rotation.equals(Rotation.CLOCKWISE) ? 1 : -1) * (firstSkipped ? 2 : 1)) % playerCount;
         if (res < 0) {
             res += playerCount;
