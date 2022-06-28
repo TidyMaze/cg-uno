@@ -32,10 +32,30 @@ public class Referee extends AbstractReferee {
 
     Display graphics;
 
-    Consumer<Integer> onDrawTwo = tooltipHandler("+2");
-    Consumer<Integer> onSkip = tooltipHandler("Skip");
-    Consumer<Integer> onReverse = tooltipHandler("Reverse");
-    Consumer<Integer> onWildDrawFour = tooltipHandler("+4");
+    GameEngine gameEngine;
+
+    GameEngineListener listener = new GameEngineListener() {
+        @Override
+        public void onDrawTwo(int playerIndex) {
+            tooltipHandler("+2").accept(playerIndex);
+        }
+
+        @Override
+        public void onSkip(int playerIndex) {
+            tooltipHandler("Skip").accept(playerIndex);
+        }
+
+        @Override
+        public void onReverse(int playerIndex) {
+            tooltipHandler("Reverse").accept(playerIndex);
+        }
+
+        @Override
+        public void onWildDrawFour(int playerIndex) {
+            tooltipHandler("+4").accept(playerIndex);
+        }
+    };
+
     private Random random;
 
     @Override
@@ -56,6 +76,8 @@ public class Referee extends AbstractReferee {
         state = new State(deck, new ArrayList<>(), hands);
         state.drawToDiscardPile();
         System.out.println(state.toString());
+
+        gameEngine = new GameEngine(gm.getPlayerCount(), gm.getRandom(), listener);
     }
 
     @Override
@@ -89,7 +111,7 @@ public class Referee extends AbstractReferee {
             System.out.println("Valid actions: " + validActions);
 
             if (isValid(validActions, action)) {
-                GameEngine.playAction(state, action, onDrawTwo, onSkip, onReverse, onWildDrawFour, playerCount, random);
+                gameEngine.playAction(state, action);
                 onActionPlayed(player, action);
 
                 if (playerWon(hand)) {

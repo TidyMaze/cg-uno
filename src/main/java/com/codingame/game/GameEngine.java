@@ -16,6 +16,18 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 public class GameEngine {
+
+    int playerCount;
+    Random random;
+
+    GameEngineListener listener;
+
+    public GameEngine(int playerCount, Random random, GameEngineListener listener) {
+        this.playerCount = playerCount;
+        this.random = random;
+        this.listener = listener;
+    }
+
     static List<Action> getValidActions(State state, int currentPlayer) {
         ArrayList<Action> actions = new ArrayList<Action>();
 
@@ -74,7 +86,7 @@ public class GameEngine {
         return false;
     }
 
-    public static void playAction(State state, Action action, Consumer<Integer> onDrawTwo, Consumer<Integer> onSkip, Consumer<Integer> onReverse, Consumer<Integer> onWildDrawFour, int playerCount, Random random) {
+    public void playAction(State state, Action action) {
 
         int playerIndex = state.nextPlayer;
 
@@ -100,19 +112,19 @@ public class GameEngine {
         if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof DrawTwoCard) {
             state.hands.get(currentNextPlayerIndex).addAll(state.draw(2, random));
             skipNextPlayer = true;
-            onDrawTwo.accept(playerIndex);
+            listener.onDrawTwo(playerIndex);
         } else if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof SkipCard) {
             skipNextPlayer = true;
-            onSkip.accept(playerIndex);
+            listener.onSkip(playerIndex);
         } else if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof ReverseCard) {
             state.setRotation(state.rotation.equals(Rotation.CLOCKWISE) ? Rotation.COUNTER_CLOCKWISE : Rotation.CLOCKWISE);
-            onReverse.accept(playerIndex);
+            listener.onReverse(playerIndex);
         } else if (action instanceof WildAction) {
             // nothing
         } else if (action instanceof WildDrawFourAction) {
             state.hands.get(currentNextPlayerIndex).addAll(state.draw(4, random));
             skipNextPlayer = true;
-            onWildDrawFour.accept(playerIndex);
+            listener.onWildDrawFour(playerIndex);
         }
 
         state.lastAction = Optional.of(action);
