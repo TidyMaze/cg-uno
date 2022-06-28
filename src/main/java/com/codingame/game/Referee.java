@@ -62,11 +62,12 @@ public class Referee extends AbstractReferee {
         System.out.printf("Turn %d%n", turn);
         int playerCount = gm.getPlayerCount();
         Player player = gm.getPlayer(state.nextPlayer);
+        int playerIndex = player.getIndex();
 
         List<Action> validActions = drawCardOrRedraw(random, player);
 
         if (validActions.isEmpty()) {
-            skipTurnStillCannotPlayAfterRedraw(playerCount, player);
+            skipTurnStillCannotPlayAfterRedraw(playerCount, playerIndex);
         } else {
             doOnePlayerTurn(playerCount, player, validActions);
         }
@@ -106,10 +107,10 @@ public class Referee extends AbstractReferee {
         }
     }
 
-    private void skipTurnStillCannotPlayAfterRedraw(int playerCount, Player player) {
-        Card drawnCard = state.hands.get(player.getIndex()).get(state.hands.get(player.getIndex()).size() - 1);
-        System.out.printf("Player %d still have no valid action, skip turn%n", player.getIndex(), drawnCard);
-        state.nextPlayer = GameEngine.nextPlayerIndex(state.rotation, player.getIndex(), false, playerCount);
+    private void skipTurnStillCannotPlayAfterRedraw(int playerCount, int playerIndex) {
+        Card drawnCard = state.hands.get(playerIndex).get(state.hands.get(playerIndex).size() - 1);
+        System.out.printf("Player %d still have no valid action, skip turn%n", playerIndex, drawnCard);
+        state.nextPlayer = GameEngine.nextPlayerIndex(state.rotation, playerIndex, false, playerCount);
     }
 
     private List<Action> drawCardOrRedraw(Random random, Player player) {
