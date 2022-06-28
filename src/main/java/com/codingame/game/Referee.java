@@ -3,6 +3,7 @@ package com.codingame.game;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.function.Consumer;
 
 import com.codingame.game.graphics.Display;
@@ -50,31 +51,31 @@ public class Referee extends AbstractReferee {
 
     @Override
     public void gameTurn(int turn) {
+        System.out.printf("Turn %d%n", turn);
+
         Consumer<Integer> onDrawTwo = tooltipHandler("+2");
         Consumer<Integer> onSkip = tooltipHandler("Skip");
         Consumer<Integer> onReverse = tooltipHandler("Reverse");
         Consumer<Integer> onWildDrawFour = tooltipHandler("+4");
 
-        System.out.printf("Turn %d%n", turn);
-
+        Random random = gm.getRandom();
+        int playerCount = gm.getPlayerCount();
         Player player = gm.getPlayer(state.nextPlayer);
 
         List<Action> validActions = GameEngine.getValidActions(state, player.getIndex());
 
         if (validActions.isEmpty()) {
-            Card drawn = state.draw(1, gm.getRandom()).get(0);
+            Card drawn = state.draw(1, random).get(0);
             state.hands.get(player.getIndex()).add(drawn);
             System.out.printf("Player %d had no valid action, drew %s%n", player.getIndex(), drawn);
-
             validActions = GameEngine.getValidActions(state, player.getIndex());
         }
 
         if (validActions.isEmpty()) {
             Card drawnCard = state.hands.get(player.getIndex()).get(state.hands.get(player.getIndex()).size() - 1);
             System.out.printf("Player %d still have no valid action, skip turn%n", player.getIndex(), drawnCard);
-            state.nextPlayer = GameEngine.nextPlayerIndex(state.rotation, player.getIndex(), false, gm.getPlayerCount());
+            state.nextPlayer = GameEngine.nextPlayerIndex(state.rotation, player.getIndex(), false, playerCount);
         } else {
-            // Input line containing the hand of the player and last card in the discard pile
             List<Card> hand = state.hands.get(player.getIndex());
             Optional<Card> lastDiscardedCard = state.discardPile.isEmpty() ? Optional.empty() : Optional.of(state.discardPile.get(state.discardPile.size() - 1));
 
@@ -105,18 +106,11 @@ public class Referee extends AbstractReferee {
 
                 Action action = parseAction(line);
                 System.out.println("Player " + player.getIndex() + " played " + action);
-
                 System.out.println("Valid actions: " + validActions);
 
                 boolean isValid = validActions.contains(action);
                 if (isValid) {
-                    GameEngine.playAction(state, action,
-                            onDrawTwo,
-                            onSkip,
-                            onReverse,
-                            onWildDrawFour,
-                            gm.getPlayerCount(),
-                            gm.getRandom());
+                    GameEngine.playAction(state, action, onDrawTwo, onSkip, onReverse, onWildDrawFour, playerCount, random);
                     gm.addToGameSummary(String.format("%s played %s", player.getNicknameToken(), action));
 
                     if (hand.size() == 0) {
