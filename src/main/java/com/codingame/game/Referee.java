@@ -230,8 +230,8 @@ public class Referee extends AbstractReferee {
 
         graphicEntityModule.createText(card.getDisplayText())
                 .setTextAlign(CENTER)
-                .setX(x)
-                .setY(y)
+                .setX(x - 20)
+                .setY(y - 30)
                 // white
                 .setFontSize(50)
                 .setFillColor(0xFFFFFF)
@@ -260,8 +260,8 @@ public class Referee extends AbstractReferee {
 
         graphicEntityModule.createText(String.format("%d", count))
                 .setTextAlign(CENTER)
-                .setX(x)
-                .setY(y)
+                .setX(x - 25)
+                .setY(y - 30)
                 // white
                 .setFontSize(50)
                 .setFillColor(0xFFFFFF)
