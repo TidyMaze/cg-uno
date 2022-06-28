@@ -78,19 +78,7 @@ public class Referee extends AbstractReferee {
             state.nextPlayer = GameEngine.nextPlayerIndex(state.rotation, player.getIndex(), false, playerCount);
         } else {
             List<Card> hand = state.hands.get(player.getIndex());
-            Optional<Card> lastDiscardedCard = state.discardPile.isEmpty() ? Optional.empty() : Optional.of(state.discardPile.get(state.discardPile.size() - 1));
-
-            player.sendInputLine(String.format("%d", hand.size()));
-            for (Card card : hand) {
-                player.sendInputLine(card.toString());
-            }
-
-            player.sendInputLine(String.format("%d", validActions.size()));
-            for (Action action : validActions) {
-                player.sendInputLine(action.toString());
-            }
-
-            player.sendInputLine(lastDiscardedCard.map(Card::toString).orElse("NO_DISCARDED_CARD"));
+            sendInputLines(player, validActions, hand);
             player.execute();
             try {
                 List<String> outputs = player.getOutputs();
@@ -132,6 +120,22 @@ public class Referee extends AbstractReferee {
         System.out.printf("End of turn %d%n", turn);
 
         // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
+    }
+
+    private void sendInputLines(Player player, List<Action> validActions, List<Card> hand) {
+        Optional<Card> lastDiscardedCard = state.discardPile.isEmpty() ? Optional.empty() : Optional.of(state.discardPile.get(state.discardPile.size() - 1));
+
+        player.sendInputLine(String.format("%d", hand.size()));
+        for (Card card : hand) {
+            player.sendInputLine(card.toString());
+        }
+
+        player.sendInputLine(String.format("%d", validActions.size()));
+        for (Action action : validActions) {
+            player.sendInputLine(action.toString());
+        }
+
+        player.sendInputLine(lastDiscardedCard.map(Card::toString).orElse("NO_DISCARDED_CARD"));
     }
 
     private static void disqualifyPlayer(Player player, String action) {
