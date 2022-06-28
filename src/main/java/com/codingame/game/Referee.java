@@ -269,6 +269,7 @@ public class Referee extends AbstractReferee {
                 .setFillColor(0xFFFFFF)
                 .setStrokeColor(0x000000)
                 .setStrokeThickness(5)
+                .setZIndex(10)
                 .setVisible(true);
 
         g.add(c);
