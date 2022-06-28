@@ -188,11 +188,37 @@ public class Referee extends AbstractReferee {
 
     private void drawHand(List<Card> hand, int playerIndex) {
         Coordinate center = getCenterOfHand(playerIndex);
+
+        Group g = graphicEntityModule.createGroup();
+
         int handRectangleStartX = center.x - ((hand.size() - 1) * CARD_WIDTH) / 2;
 
         for (int iCard = 0; iCard < hand.size(); iCard++) {
-            drawCard(handRectangleStartX + iCard * CARD_WIDTH, center.y, hand.get(iCard));
+            Group c = drawCard(handRectangleStartX + iCard * CARD_WIDTH, center.y, hand.get(iCard));
+            g.add(c);
         }
+
+        double rotation = getRotation(playerIndex);
+        g.setRotation(rotation);
+    }
+
+    private double getRotation(int playerIndex) {
+        switch (playerIndex) {
+            case 0:
+                return degreesToRadians(0);
+            case 1:
+                return degreesToRadians(-90);
+            case 2:
+                return degreesToRadians(0);
+            case 3:
+                return degreesToRadians(90);
+            default:
+                throw new IllegalArgumentException("Invalid player index");
+        }
+    }
+
+    double degreesToRadians(double degrees) {
+        return degrees * Math.PI / 180;
     }
 
     private Coordinate getCenterOfHand(int playerIndex) {
@@ -215,10 +241,12 @@ public class Referee extends AbstractReferee {
         }
     }
 
-    private void drawCard(int x, int y, Card card) {
+    private Group drawCard(int x, int y, Card card) {
         Optional<Integer> displayColor = card.getCardColor().map(color -> color.getDisplayColor());
 
-        graphicEntityModule.createRoundedRectangle()
+        Group g = graphicEntityModule.createGroup();
+
+        RoundedRectangle c = graphicEntityModule.createRoundedRectangle()
                 .setFillColor(displayColor.orElse(0x000000))
                 .setLineColor(0xFFFFFF)
                 .setLineWidth(5)
@@ -228,7 +256,7 @@ public class Referee extends AbstractReferee {
                 .setY(y - CARD_HEIGHT / 2)
                 .setVisible(true);
 
-        graphicEntityModule.createText(card.getDisplayText())
+        Text t = graphicEntityModule.createText(card.getDisplayText())
                 .setTextAlign(CENTER)
                 .setX(x - 20)
                 .setY(y - 30)
@@ -238,6 +266,10 @@ public class Referee extends AbstractReferee {
                 .setStrokeColor(0x000000)
                 .setStrokeThickness(5)
                 .setVisible(true);
+
+        g.add(c);
+        g.add(t);
+        return g;
     }
 
     private void drawDeck(int x, int y, int count) {
