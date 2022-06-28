@@ -17,6 +17,7 @@ import com.codingame.gameengine.core.MultiplayerGameManager;
 import com.codingame.gameengine.module.entities.*;
 import com.google.inject.Inject;
 
+import static com.codingame.game.GameEngine.playerWon;
 import static com.codingame.game.io.Serializers.parseAction;
 
 public class Referee extends AbstractReferee {
@@ -136,10 +137,6 @@ public class Referee extends AbstractReferee {
     private static void disqualifyPlayer(Player player, String action) {
         player.deactivate(action);
         player.setScore(-1);
-    }
-
-    private static boolean playerWon(List<Card> hand) {
-        return hand.size() == 0;
     }
 
     private void onVictory(Player player) {

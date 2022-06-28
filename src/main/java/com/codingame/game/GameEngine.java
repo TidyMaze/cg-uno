@@ -140,4 +140,8 @@ public class GameEngine {
         }
         return score;
     }
+
+    static boolean playerWon(List<Card> hand) {
+        return hand.size() == 0;
+    }
 }
