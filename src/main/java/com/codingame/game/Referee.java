@@ -114,8 +114,8 @@ public class Referee extends AbstractReferee {
 
     private void skipTurnStillCannotPlayAfterRedraw(int playerIndex) {
         Card drawnCard = state.hands.get(playerIndex).get(state.hands.get(playerIndex).size() - 1);
-        System.out.printf("Player %d still have no valid action, skip turn%n", playerIndex, drawnCard);
         state.nextPlayer = gameEngine.nextPlayerIndex(state.rotation, playerIndex, false);
+        gm.addToGameSummary(String.format("Player %d still have no valid action, skip turn, next player is %d", playerIndex, state.nextPlayer));
     }
 
     private List<Action> drawCardOrRedraw(Player player) {
@@ -180,7 +180,7 @@ public class Referee extends AbstractReferee {
     }
 
     private void onActionPlayed(Player player, Action action) {
-        gm.addToGameSummary(String.format("%s played %s", player.getNicknameToken(), action));
+        gm.addToGameSummary(String.format("%s played %s, next player is %s", player.getNicknameToken(), action, state.nextPlayer));
     }
 
 
