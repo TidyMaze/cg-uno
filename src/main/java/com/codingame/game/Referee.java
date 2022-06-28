@@ -191,15 +191,19 @@ public class Referee extends AbstractReferee {
 
         Group g = graphicEntityModule.createGroup();
 
-        int handRectangleStartX = center.x - ((hand.size() - 1) * CARD_WIDTH) / 2;
+        int handRectangleStartX = -((hand.size() - 1) * CARD_WIDTH) / 2;
 
         for (int iCard = 0; iCard < hand.size(); iCard++) {
-            Group c = drawCard(handRectangleStartX + iCard * CARD_WIDTH, center.y, hand.get(iCard));
+            Group c = drawCard(handRectangleStartX + iCard * CARD_WIDTH, 0, hand.get(iCard));
             g.add(c);
         }
 
+        g.setX(center.x);
+        g.setY(center.y);
+
         double rotation = getRotation(playerIndex);
         g.setRotation(rotation);
+
     }
 
     private double getRotation(int playerIndex) {
