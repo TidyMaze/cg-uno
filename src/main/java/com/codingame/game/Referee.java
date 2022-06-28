@@ -111,12 +111,10 @@ public class Referee extends AbstractReferee {
                 boolean isValid = validActions.contains(action);
                 if (isValid) {
                     GameEngine.playAction(state, action, onDrawTwo, onSkip, onReverse, onWildDrawFour, playerCount, random);
-                    gm.addToGameSummary(String.format("%s played %s", player.getNicknameToken(), action));
+                    onActionPlayed(player, action);
 
-                    if (hand.size() == 0) {
-                        gm.addTooltip(player, "Player " + player.getIndex() + " played the last card and won!");
-                        player.setScore(computeScore(state.hands, player.getIndex()));
-                        gm.endGame();
+                    if (playerWon(hand)) {
+                        onVictory(player);
                     }
                 } else {
                     player.deactivate("Invalid action " + action);
@@ -139,6 +137,24 @@ public class Referee extends AbstractReferee {
         System.out.printf("End of turn %d%n", turn);
 
         // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
+    }
+
+    private static boolean playerWon(List<Card> hand) {
+        return hand.size() == 0;
+    }
+
+    private void onVictory(Player player) {
+        showVictoryTooltip(player);
+        player.setScore(computeScore(state.hands, player.getIndex()));
+        gm.endGame();
+    }
+
+    private void showVictoryTooltip(Player player) {
+        gm.addTooltip(player, "Player " + player.getIndex() + " played the last card and won!");
+    }
+
+    private void onActionPlayed(Player player, Action action) {
+        gm.addToGameSummary(String.format("%s played %s", player.getNicknameToken(), action));
     }
 
     private Consumer<Integer> tooltipHandler(String plus2) {
