@@ -1,6 +1,7 @@
 package com.codingame.game.graphics;
 
-import com.codingame.game.*;
+import com.codingame.game.models.Color;
+import com.codingame.game.models.cards.*;
 
 public class Display {
     public static final int RED_CARD_COLOR = 0xd60000;

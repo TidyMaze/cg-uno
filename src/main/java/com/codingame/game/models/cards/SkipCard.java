@@ -1,4 +1,6 @@
-package com.codingame.game;
+package com.codingame.game.models.cards;
+
+import com.codingame.game.models.Color;
 
 import java.util.Objects;
 import java.util.Optional;

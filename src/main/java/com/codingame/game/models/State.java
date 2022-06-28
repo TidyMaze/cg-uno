@@ -1,5 +1,8 @@
-package com.codingame.game;
+package com.codingame.game.models;
 
+import com.codingame.game.NotEnoughCardsException;
+import com.codingame.game.models.actions.Action;
+import com.codingame.game.models.cards.Card;
 import com.codingame.gameengine.core.MultiplayerGameManager;
 
 import java.util.ArrayList;
@@ -8,14 +11,14 @@ import java.util.Optional;
 import java.util.StringJoiner;
 
 public class State {
-    Deck deck;
-    List<Card> discardPile;
+    public Deck deck;
+    public List<Card> discardPile;
 
-    List<List<Card>> hands;
+    public List<List<Card>> hands;
 
-    Optional<Action> lastAction = Optional.empty();
+    public Optional<Action> lastAction = Optional.empty();
 
-    Rotation rotation = Rotation.CLOCKWISE;
+    public Rotation rotation = Rotation.CLOCKWISE;
     public int nextPlayer;
 
     public State(Deck deck, List<Card> discardPile, List<List<Card>> hands) {
@@ -36,7 +39,7 @@ public class State {
                 .toString();
     }
 
-    void drawToDiscardPile() {
+    public void drawToDiscardPile() {
         discardPile.addAll(deck.draw(1));
     }
 
@@ -73,14 +76,3 @@ public class State {
     }
 }
 
-enum Rotation {
-    CLOCKWISE(1),
-    COUNTER_CLOCKWISE(-1);
-
-
-    final int offset;
-
-    Rotation(int offset) {
-        this.offset = offset;
-    }
-}

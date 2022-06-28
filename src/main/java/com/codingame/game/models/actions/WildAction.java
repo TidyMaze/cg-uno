@@ -1,9 +1,11 @@
-package com.codingame.game;
+package com.codingame.game.models.actions;
+
+import com.codingame.game.models.Color;
 
 import java.util.Objects;
 
 public class WildAction implements Action {
-    Color color;
+    public Color color;
 
     @Override
     public String toString() {

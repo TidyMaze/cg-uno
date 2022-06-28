@@ -1,19 +1,20 @@
-package com.codingame.game;
+package com.codingame.game.models.cards;
+
+import com.codingame.game.models.Color;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.StringJoiner;
 
-public class ReverseCard implements Card {
+public class DrawTwoCard implements Card {
     private Color color;
 
-    public ReverseCard(Color color) {
+    public DrawTwoCard(Color color) {
         this.color = color;
     }
 
     @Override
     public String toString() {
-        return String.format("REVERSE %s", color.name());
+        return String.format("DRAW_TWO %s", color.name());
     }
 
     @Override
@@ -34,7 +35,7 @@ public class ReverseCard implements Card {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ReverseCard that = (ReverseCard) o;
+        DrawTwoCard that = (DrawTwoCard) o;
         return color == that.color;
     }
 

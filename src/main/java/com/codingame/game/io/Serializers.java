@@ -1,10 +1,15 @@
 package com.codingame.game.io;
 
-import com.codingame.game.*;
-import com.codingame.game.NumberCard.Value;
+import com.codingame.game.models.Color;
+import com.codingame.game.models.actions.Action;
+import com.codingame.game.models.actions.SimpleAction;
+import com.codingame.game.models.actions.WildAction;
+import com.codingame.game.models.actions.WildDrawFourAction;
+import com.codingame.game.models.cards.*;
+import com.codingame.game.models.cards.NumberCard.Value;
 
-import static com.codingame.game.Color.*;
-import static com.codingame.game.NumberCard.Value.*;
+import static com.codingame.game.models.Color.*;
+import static com.codingame.game.models.cards.NumberCard.Value.*;
 
 public class Serializers {
     public static Card parseCard(String line) {

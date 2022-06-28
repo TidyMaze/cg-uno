@@ -1,9 +1,11 @@
-package com.codingame.game;
+package com.codingame.game.models.actions;
+
+import com.codingame.game.models.cards.Card;
 
 import java.util.Objects;
 
 public class SimpleAction implements Action {
-    Card card;
+    public Card card;
 
     @Override
     public String toString() {

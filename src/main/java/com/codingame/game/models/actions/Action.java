@@ -1,4 +1,4 @@
-package com.codingame.game;
+package com.codingame.game.models.actions;
 
 import java.util.Objects;
 import java.util.StringJoiner;

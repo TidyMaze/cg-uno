@@ -2,10 +2,17 @@ package com.codingame.game;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import com.codingame.game.graphics.Display;
+import com.codingame.game.models.Color;
+import com.codingame.game.models.Coordinate;
+import com.codingame.game.models.Deck;
+import com.codingame.game.models.State;
+import com.codingame.game.models.actions.Action;
+import com.codingame.game.models.cards.Card;
+import com.codingame.game.models.cards.NumberCard;
+import com.codingame.game.models.cards.ReverseCard;
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
 import com.codingame.gameengine.core.AbstractReferee;
 import com.codingame.gameengine.core.MultiplayerGameManager;
@@ -312,16 +319,6 @@ public class Referee extends AbstractReferee {
                 .setStrokeColor(BLACK)
                 .setStrokeThickness(5)
                 .setVisible(true);
-    }
-}
-
-class Coordinate {
-    int x;
-    int y;
-
-    public Coordinate(int x, int y) {
-        this.x = x;
-        this.y = y;
     }
 }
 

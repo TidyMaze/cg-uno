@@ -1,11 +1,13 @@
-package com.codingame.game;
+package com.codingame.game.models;
 
-import com.codingame.game.NumberCard.Value;
+import com.codingame.game.Player;
+import com.codingame.game.models.cards.*;
+import com.codingame.game.models.cards.NumberCard.Value;
 import com.codingame.gameengine.core.MultiplayerGameManager;
 
 import java.util.*;
 
-class Deck {
+public class Deck {
 
     private List<Card> cards;
 
@@ -28,7 +30,7 @@ class Deck {
         this.cards.addAll(cards);
     }
 
-    static Deck buildDeck() {
+    public static Deck buildDeck() {
         Deck d = new Deck();
 
         // add all cards from 1 to 9 for each color, twice
@@ -81,7 +83,7 @@ class Deck {
         Collections.shuffle(this.cards, random);
     }
 
-    List<Card> draw(int count) {
+    public List<Card> draw(int count) {
         ArrayList<Card> res = new ArrayList<>(cards.subList(0, count));
         cards = new ArrayList<>(cards.subList(count, cards.size()));
         return res;
