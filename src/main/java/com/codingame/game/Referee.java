@@ -81,17 +81,7 @@ public class Referee extends AbstractReferee {
             sendInputLines(player, validActions, hand);
             player.execute();
             try {
-                List<String> outputs = player.getOutputs();
-                if (outputs.size() != 1) {
-                    disqualifyPlayer(player, "Too many output lines!");
-                }
-
-                String line = outputs.get(0);
-                if (line.isEmpty()) {
-                    disqualifyPlayer(player, "Empty line");
-                }
-
-                Action action = parseAction(line);
+                Action action = readPlayerAction(player);
                 System.out.println("Player " + player.getIndex() + " played " + action);
                 System.out.println("Valid actions: " + validActions);
 
@@ -120,6 +110,21 @@ public class Referee extends AbstractReferee {
         System.out.printf("End of turn %d%n", turn);
 
         // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
+    }
+
+    private static Action readPlayerAction(Player player) throws TimeoutException {
+        List<String> outputs = player.getOutputs();
+        if (outputs.size() != 1) {
+            disqualifyPlayer(player, "Too many output lines!");
+        }
+
+        String line = outputs.get(0);
+        if (line.isEmpty()) {
+            disqualifyPlayer(player, "Empty line");
+        }
+
+        Action action = parseAction(line);
+        return action;
     }
 
     private void sendInputLines(Player player, List<Action> validActions, List<Card> hand) {
