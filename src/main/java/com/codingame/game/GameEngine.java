@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class GameEngine {
     static List<Action> getValidActions(State state, int currentPlayer) {
@@ -74,10 +75,9 @@ public class GameEngine {
         return false;
     }
 
-    public static void playAction(State state, Action action, MultiplayerGameManager<Player> gameManager, BiConsumer<Integer, Player> onDrawTwo, BiConsumer<Integer, Player> onSkip, BiConsumer<Integer, Player> onReverse, BiConsumer<Integer, Player> onWildDrawFour) {
+    public static void playAction(State state, Action action, MultiplayerGameManager<Player> gameManager, Consumer<Integer> onDrawTwo, Consumer<Integer> onSkip, Consumer<Integer> onReverse, Consumer<Integer> onWildDrawFour, int playerCount) {
 
         int playerIndex = state.nextPlayer;
-        Player player = (Player) gameManager.getPlayer(playerIndex);
 
         Card card;
         if (action instanceof SimpleAction) {
@@ -96,28 +96,28 @@ public class GameEngine {
 
         boolean skipNextPlayer = false;
 
-        int currentNextPlayerIndex = nextPlayerIndex(state.rotation, playerIndex, false, gameManager.getPlayerCount());
+        int currentNextPlayerIndex = nextPlayerIndex(state.rotation, playerIndex, false, playerCount);
 
         if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof DrawTwoCard) {
             state.hands.get(currentNextPlayerIndex).addAll(state.draw(gameManager, 2));
             skipNextPlayer = true;
-            onDrawTwo.accept(playerIndex, player);
+            onDrawTwo.accept(playerIndex);
         } else if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof SkipCard) {
             skipNextPlayer = true;
-            onSkip.accept(playerIndex, player);
+            onSkip.accept(playerIndex);
         } else if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof ReverseCard) {
             state.setRotation(state.rotation.equals(Rotation.CLOCKWISE) ? Rotation.COUNTER_CLOCKWISE : Rotation.CLOCKWISE);
-            onReverse.accept(playerIndex, player);
+            onReverse.accept(playerIndex);
         } else if (action instanceof WildAction) {
             // nothing
         } else if (action instanceof WildDrawFourAction) {
             state.hands.get(currentNextPlayerIndex).addAll(state.draw(gameManager, 4));
             skipNextPlayer = true;
-            onWildDrawFour.accept(playerIndex, player);
+            onWildDrawFour.accept(playerIndex);
         }
 
         state.lastAction = Optional.of(action);
-        state.setNextPlayer(nextPlayerIndex(state.rotation, playerIndex, skipNextPlayer, gameManager.getPlayerCount()));
+        state.setNextPlayer(nextPlayerIndex(state.rotation, playerIndex, skipNextPlayer, playerCount));
     }
 
     static int nextPlayerIndex(Rotation rotation, int playerIndex, boolean firstSkipped, int playerCount) {

@@ -3,6 +3,7 @@ package com.codingame.game;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import com.codingame.game.graphics.Display;
 import com.codingame.game.models.Deck;
@@ -20,7 +21,7 @@ import static com.codingame.game.io.Serializers.parseAction;
 public class Referee extends AbstractReferee {
 
     @Inject
-    private MultiplayerGameManager<Player> gameManager;
+    private MultiplayerGameManager<Player> gm;
     @Inject
     private GraphicEntityModule graphicEntityModule;
 
@@ -32,13 +33,13 @@ public class Referee extends AbstractReferee {
     public void init() {
         this.graphics = new Display(graphicEntityModule);
 
-        gameManager.setMaxTurns(200);
+        gm.setMaxTurns(200);
 
         Deck deck = Deck.buildDeck();
-        deck.shuffle(gameManager);
+        deck.shuffle(gm);
 
         List<List<Card>> hands = new ArrayList<>();
-        for (int i = 0; i < gameManager.getPlayerCount(); i++) {
+        for (int i = 0; i < gm.getPlayerCount(); i++) {
             hands.add(deck.draw(7));
         }
 
@@ -51,12 +52,12 @@ public class Referee extends AbstractReferee {
     public void gameTurn(int turn) {
         System.out.printf("Turn %d%n", turn);
 
-        Player player = gameManager.getPlayer(state.nextPlayer);
+        Player player = gm.getPlayer(state.nextPlayer);
 
         List<Action> validActions = GameEngine.getValidActions(state, player.getIndex());
 
         if (validActions.isEmpty()) {
-            Card drawn = state.draw(gameManager, 1).get(0);
+            Card drawn = state.draw(gm, 1).get(0);
             state.hands.get(player.getIndex()).add(drawn);
             System.out.printf("Player %d had no valid action, drew %s%n", player.getIndex(), drawn);
 
@@ -66,7 +67,7 @@ public class Referee extends AbstractReferee {
         if (validActions.isEmpty()) {
             Card drawnCard = state.hands.get(player.getIndex()).get(state.hands.get(player.getIndex()).size() - 1);
             System.out.printf("Player %d still have no valid action, skip turn%n", player.getIndex(), drawnCard);
-            state.nextPlayer = GameEngine.nextPlayerIndex(state.rotation, player.getIndex(), false, gameManager.getPlayerCount());
+            state.nextPlayer = GameEngine.nextPlayerIndex(state.rotation, player.getIndex(), false, gm.getPlayerCount());
         } else {
             // Input line containing the hand of the player and last card in the discard pile
             List<Card> hand = state.hands.get(player.getIndex());
@@ -104,13 +105,18 @@ public class Referee extends AbstractReferee {
 
                 boolean isValid = validActions.contains(action);
                 if (isValid) {
-                    GameEngine.playAction(state, action, gameManager, (playerIndex1, player1) -> gameManager.addTooltip(gameManager.getPlayer(playerIndex1), (player1.getNicknameToken()) + " played a +2"), (playerIndex1, player1) -> gameManager.addTooltip(gameManager.getPlayer(playerIndex1), (player1.getNicknameToken()) + " played a Skip"), (playerIndex1, player1) -> gameManager.addTooltip(gameManager.getPlayer(playerIndex1), (player1.getNicknameToken()) + " played a reverse"), (playerIndex1, player1) -> gameManager.addTooltip(gameManager.getPlayer(playerIndex1), (player1.getNicknameToken()) + " played a +4"));
-                    gameManager.addToGameSummary(String.format("%s played %s", player.getNicknameToken(), action));
+                    GameEngine.playAction(state, action, gm,
+                            tooltipHandler("+2"),
+                            tooltipHandler("Skip"),
+                            tooltipHandler("Reverse"),
+                            tooltipHandler("+4"),
+                            gm.getPlayerCount());
+                    gm.addToGameSummary(String.format("%s played %s", player.getNicknameToken(), action));
 
                     if (hand.size() == 0) {
-                        gameManager.addTooltip(player, "Player " + player.getIndex() + " played the last card and won!");
+                        gm.addTooltip(player, "Player " + player.getIndex() + " played the last card and won!");
                         player.setScore(computeScore(state.hands, player.getIndex()));
-                        gameManager.endGame();
+                        gm.endGame();
                     }
                 } else {
                     player.deactivate("Invalid action " + action);
@@ -119,12 +125,12 @@ public class Referee extends AbstractReferee {
             } catch (TimeoutException e) {
                 player.deactivate(String.format("$%d timeout!", player.getIndex()));
                 player.setScore(-1);
-                gameManager.endGame();
+                gm.endGame();
             } catch (IllegalArgumentException e) {
                 player.deactivate("Invalid action " + e.getMessage());
                 player.setScore(-1);
             } catch (NotEnoughCardsException e) {
-                gameManager.endGame();
+                gm.endGame();
             }
         }
 
@@ -133,6 +139,10 @@ public class Referee extends AbstractReferee {
         System.out.printf("End of turn %d%n", turn);
 
         // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
+    }
+
+    private Consumer<Integer> tooltipHandler(String plus2) {
+        return pi -> gm.addTooltip(gm.getPlayer(pi), (gm.getPlayer(pi).getNicknameToken()) + " played a " + plus2);
     }
 
     private int computeScore(List<List<Card>> hands, int playerIndex) {
