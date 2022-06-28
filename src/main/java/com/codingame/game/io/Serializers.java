@@ -101,4 +101,12 @@ public class Serializers {
             throw new IllegalArgumentException("Invalid card: " + line, e);
         }
     }
+
+    public static String serializeCard(Card card) {
+        return card.toString();
+    }
+
+    public static String serializeAction(Action action) {
+        return action.toString();
+    }
 }

@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 import com.codingame.game.graphics.Display;
+import com.codingame.game.io.Serializers;
 import com.codingame.game.models.Deck;
 import com.codingame.game.models.State;
 import com.codingame.game.models.actions.Action;
@@ -18,7 +19,7 @@ import com.codingame.gameengine.module.entities.*;
 import com.google.inject.Inject;
 
 import static com.codingame.game.GameEngine.playerWon;
-import static com.codingame.game.io.Serializers.parseAction;
+import static com.codingame.game.io.Serializers.*;
 
 public class Referee extends AbstractReferee {
 
@@ -148,15 +149,15 @@ public class Referee extends AbstractReferee {
 
         player.sendInputLine(String.format("%d", hand.size()));
         for (Card card : hand) {
-            player.sendInputLine(card.toString());
+            player.sendInputLine(serializeCard(card));
         }
 
         player.sendInputLine(String.format("%d", validActions.size()));
         for (Action action : validActions) {
-            player.sendInputLine(action.toString());
+            player.sendInputLine(serializeAction(action));
         }
 
-        player.sendInputLine(lastDiscardedCard.map(Card::toString).orElse("NO_DISCARDED_CARD"));
+        player.sendInputLine(lastDiscardedCard.map(Serializers::serializeCard).orElse("NO_DISCARDED_CARD"));
     }
 
     private static void disqualifyPlayer(Player player, String action) {
