@@ -34,27 +34,7 @@ public class Referee extends AbstractReferee {
 
     GameEngine gameEngine;
 
-    GameEngineListener listener = new GameEngineListener() {
-        @Override
-        public void onDrawTwo(int playerIndex) {
-            tooltipHandler("+2").accept(playerIndex);
-        }
-
-        @Override
-        public void onSkip(int playerIndex) {
-            tooltipHandler("Skip").accept(playerIndex);
-        }
-
-        @Override
-        public void onReverse(int playerIndex) {
-            tooltipHandler("Reverse").accept(playerIndex);
-        }
-
-        @Override
-        public void onWildDrawFour(int playerIndex) {
-            tooltipHandler("+4").accept(playerIndex);
-        }
-    };
+    GameEngineListener listener;
 
     private Random random;
     private int playerCount;
@@ -80,7 +60,10 @@ public class Referee extends AbstractReferee {
         state.drawToDiscardPile();
         System.out.println(state.toString());
 
+        listener = new CodingameGameEngineListener(gm);
         gameEngine = new GameEngine(playerCount, gm.getRandom(), listener);
+
+
     }
 
     @Override
@@ -203,9 +186,6 @@ public class Referee extends AbstractReferee {
         gm.addToGameSummary(String.format("%s played %s", player.getNicknameToken(), action));
     }
 
-    private Consumer<Integer> tooltipHandler(String plus2) {
-        return pi -> gm.addTooltip(gm.getPlayer(pi), (gm.getPlayer(pi).getNicknameToken()) + " played a " + plus2);
-    }
 
 }
 
