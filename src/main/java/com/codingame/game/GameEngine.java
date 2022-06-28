@@ -156,4 +156,8 @@ public class GameEngine {
     static boolean playerWon(List<Card> hand) {
         return hand.size() == 0;
     }
+
+    public Card drawOne(State state) {
+        return state.draw(1, random).get(0);
+    }
 }
