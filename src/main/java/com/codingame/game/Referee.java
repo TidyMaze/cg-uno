@@ -88,7 +88,7 @@ public class Referee extends AbstractReferee {
         Player player = gm.getPlayer(state.nextPlayer);
         int playerIndex = player.getIndex();
 
-        List<Action> validActions = drawCardOrRedraw(random, player);
+        List<Action> validActions = drawCardOrRedraw(player);
 
         if (validActions.isEmpty()) {
             skipTurnStillCannotPlayAfterRedraw(playerIndex);
@@ -137,7 +137,7 @@ public class Referee extends AbstractReferee {
         state.nextPlayer = gameEngine.nextPlayerIndex(state.rotation, playerIndex, false);
     }
 
-    private List<Action> drawCardOrRedraw(Random random, Player player) {
+    private List<Action> drawCardOrRedraw(Player player) {
         List<Action> validActions = GameEngine.getValidActions(state, player.getIndex());
 
         if (validActions.isEmpty()) {
