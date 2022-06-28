@@ -5,14 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.codingame.game.graphics.Display;
-import com.codingame.game.models.Color;
-import com.codingame.game.models.Coordinate;
 import com.codingame.game.models.Deck;
 import com.codingame.game.models.State;
 import com.codingame.game.models.actions.Action;
 import com.codingame.game.models.cards.Card;
-import com.codingame.game.models.cards.NumberCard;
-import com.codingame.game.models.cards.ReverseCard;
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
 import com.codingame.gameengine.core.AbstractReferee;
 import com.codingame.gameengine.core.MultiplayerGameManager;
@@ -20,7 +16,6 @@ import com.codingame.gameengine.module.entities.*;
 import com.google.inject.Inject;
 
 import static com.codingame.game.io.Serializers.parseAction;
-import static com.codingame.gameengine.module.entities.TextBasedEntity.TextAlign.CENTER;
 
 public class Referee extends AbstractReferee {
 
@@ -54,7 +49,7 @@ public class Referee extends AbstractReferee {
 
     @Override
     public void gameTurn(int turn) {
-        System.out.println(String.format("Turn %d", turn));
+        System.out.printf("Turn %d%n", turn);
 
         Player player = gameManager.getPlayer(state.nextPlayer);
 
@@ -63,16 +58,15 @@ public class Referee extends AbstractReferee {
         if (validActions.isEmpty()) {
             Card drawn = state.draw(gameManager, 1).get(0);
             state.hands.get(player.getIndex()).add(drawn);
-            System.out.println(String.format("Player %d had no valid action, drew %s", player.getIndex(), drawn));
+            System.out.printf("Player %d had no valid action, drew %s%n", player.getIndex(), drawn);
 
             validActions = GameEngine.getValidActions(state, player.getIndex());
         }
 
         if (validActions.isEmpty()) {
             Card drawnCard = state.hands.get(player.getIndex()).get(state.hands.get(player.getIndex()).size() - 1);
-            System.out.println(String.format("Player %d still have no valid action, skip turn", player.getIndex(), drawnCard));
-            int currentNextPlayerIndex = GameEngine.nextPlayerIndex(state.rotation, player.getIndex(), false, gameManager.getPlayerCount());
-            state.nextPlayer = currentNextPlayerIndex;
+            System.out.printf("Player %d still have no valid action, skip turn%n", player.getIndex(), drawnCard);
+            state.nextPlayer = GameEngine.nextPlayerIndex(state.rotation, player.getIndex(), false, gameManager.getPlayerCount());
         } else {
             // Input line containing the hand of the player and last card in the discard pile
             List<Card> hand = state.hands.get(player.getIndex());
@@ -136,7 +130,7 @@ public class Referee extends AbstractReferee {
 
         graphics.drawState(state);
 
-        System.out.println(String.format("End of turn %d", turn));
+        System.out.printf("End of turn %d%n", turn);
 
         // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
     }
@@ -144,9 +138,7 @@ public class Referee extends AbstractReferee {
     private int computeScore(List<List<Card>> hands, int playerIndex) {
         int score = 0;
         for (int iHand = 0; iHand < hands.size(); iHand++) {
-            if (iHand == playerIndex) {
-                // skip the hand of winner
-            } else {
+            if (iHand != playerIndex) {
                 List<Card> hand = hands.get(iHand);
                 for (Card card : hand) {
                     score += card.getScore();
