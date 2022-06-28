@@ -67,7 +67,6 @@ public class Display {
         graphicEntityModule.createRectangle()
                 .setHeight(height)
                 .setWidth(width)
-                // poker green background
                 .setFillColor(BACKGROUND_COLOR)
                 .setVisible(true);
 
@@ -75,15 +74,12 @@ public class Display {
         drawCard(0, 0, new NumberCard(Color.BLUE, NumberCard.Value.ONE));
         drawCard(width, height, new ReverseCard(Color.RED));
 
-        // draw the discard pile
         int discardPileX = width / 2;
         int discardPileY = height / 2;
-
         if (!state.discardPile.isEmpty()) {
             drawCard(discardPileX, discardPileY, state.discardPile.get(state.discardPile.size() - 1));
         }
 
-        // draw the deck pile
         int deckPileX = width / 2 - CARD_WIDTH - 20;
         int deckPileY = height / 2;
 
