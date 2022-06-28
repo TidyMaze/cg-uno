@@ -59,7 +59,6 @@ public class Referee extends AbstractReferee {
 
     @Override
     public void gameTurn(int turn) {
-        System.out.printf("Turn %d%n", turn);
         int playerCount = gm.getPlayerCount();
         Player player = gm.getPlayer(state.nextPlayer);
         int playerIndex = player.getIndex();
@@ -68,12 +67,15 @@ public class Referee extends AbstractReferee {
 
         if (validActions.isEmpty()) {
             skipTurnStillCannotPlayAfterRedraw(playerCount, playerIndex);
+            gameTurn(turn);
         } else {
+            System.out.printf("Turn %d%n", turn);
             doOnePlayerTurn(playerCount, player, validActions);
+            graphics.drawState(state);
+            System.out.printf("End of turn %d%n", turn);
         }
 
-        graphics.drawState(state);
-        System.out.printf("End of turn %d%n", turn);
+
     }
 
     private void doOnePlayerTurn(int playerCount, Player player, List<Action> validActions) {
