@@ -1,9 +1,7 @@
 package com.codingame.game.models;
 
-import com.codingame.game.Player;
 import com.codingame.game.models.cards.*;
 import com.codingame.game.models.cards.NumberCard.Value;
-import com.codingame.gameengine.core.MultiplayerGameManager;
 
 import java.util.*;
 
@@ -78,8 +76,7 @@ public class Deck {
         return d;
     }
 
-    public void shuffle(MultiplayerGameManager<Player> gameManager) {
-        Random random = gameManager.getRandom();
+    public void shuffle(Random random) {
         Collections.shuffle(this.cards, random);
     }
 

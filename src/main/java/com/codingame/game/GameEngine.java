@@ -8,12 +8,11 @@ import com.codingame.game.models.actions.SimpleAction;
 import com.codingame.game.models.actions.WildAction;
 import com.codingame.game.models.actions.WildDrawFourAction;
 import com.codingame.game.models.cards.*;
-import com.codingame.gameengine.core.MultiplayerGameManager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiConsumer;
+import java.util.Random;
 import java.util.function.Consumer;
 
 public class GameEngine {
@@ -75,7 +74,7 @@ public class GameEngine {
         return false;
     }
 
-    public static void playAction(State state, Action action, MultiplayerGameManager<Player> gameManager, Consumer<Integer> onDrawTwo, Consumer<Integer> onSkip, Consumer<Integer> onReverse, Consumer<Integer> onWildDrawFour, int playerCount) {
+    public static void playAction(State state, Action action, Consumer<Integer> onDrawTwo, Consumer<Integer> onSkip, Consumer<Integer> onReverse, Consumer<Integer> onWildDrawFour, int playerCount, Random random) {
 
         int playerIndex = state.nextPlayer;
 
@@ -99,7 +98,7 @@ public class GameEngine {
         int currentNextPlayerIndex = nextPlayerIndex(state.rotation, playerIndex, false, playerCount);
 
         if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof DrawTwoCard) {
-            state.hands.get(currentNextPlayerIndex).addAll(state.draw(gameManager, 2));
+            state.hands.get(currentNextPlayerIndex).addAll(state.draw(2, random));
             skipNextPlayer = true;
             onDrawTwo.accept(playerIndex);
         } else if (action instanceof SimpleAction && ((SimpleAction) action).card instanceof SkipCard) {
@@ -111,7 +110,7 @@ public class GameEngine {
         } else if (action instanceof WildAction) {
             // nothing
         } else if (action instanceof WildDrawFourAction) {
-            state.hands.get(currentNextPlayerIndex).addAll(state.draw(gameManager, 4));
+            state.hands.get(currentNextPlayerIndex).addAll(state.draw(4, random));
             skipNextPlayer = true;
             onWildDrawFour.accept(playerIndex);
         }

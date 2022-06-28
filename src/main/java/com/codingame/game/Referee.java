@@ -36,7 +36,7 @@ public class Referee extends AbstractReferee {
         gm.setMaxTurns(200);
 
         Deck deck = Deck.buildDeck();
-        deck.shuffle(gm);
+        deck.shuffle(gm.getRandom());
 
         List<List<Card>> hands = new ArrayList<>();
         for (int i = 0; i < gm.getPlayerCount(); i++) {
@@ -57,7 +57,7 @@ public class Referee extends AbstractReferee {
         List<Action> validActions = GameEngine.getValidActions(state, player.getIndex());
 
         if (validActions.isEmpty()) {
-            Card drawn = state.draw(gm, 1).get(0);
+            Card drawn = state.draw(1, gm.getRandom()).get(0);
             state.hands.get(player.getIndex()).add(drawn);
             System.out.printf("Player %d had no valid action, drew %s%n", player.getIndex(), drawn);
 
@@ -105,12 +105,13 @@ public class Referee extends AbstractReferee {
 
                 boolean isValid = validActions.contains(action);
                 if (isValid) {
-                    GameEngine.playAction(state, action, gm,
+                    GameEngine.playAction(state, action,
                             tooltipHandler("+2"),
                             tooltipHandler("Skip"),
                             tooltipHandler("Reverse"),
                             tooltipHandler("+4"),
-                            gm.getPlayerCount());
+                            gm.getPlayerCount(),
+                            gm.getRandom());
                     gm.addToGameSummary(String.format("%s played %s", player.getNicknameToken(), action));
 
                     if (hand.size() == 0) {

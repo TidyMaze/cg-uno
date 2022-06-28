@@ -3,12 +3,8 @@ package com.codingame.game.models;
 import com.codingame.game.NotEnoughCardsException;
 import com.codingame.game.models.actions.Action;
 import com.codingame.game.models.cards.Card;
-import com.codingame.gameengine.core.MultiplayerGameManager;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.StringJoiner;
+import java.util.*;
 
 public class State {
     public Deck deck;
@@ -43,7 +39,7 @@ public class State {
         discardPile.addAll(deck.draw(1));
     }
 
-    public List<Card> draw(MultiplayerGameManager gameManager, int count) {
+    public List<Card> draw(int count, Random random) {
         if ((deck.size() + Math.max(0, discardPile.size() - 1)) < count) {
             System.out.println("Not enough cards in deck and discard pile");
             throw new NotEnoughCardsException();
@@ -55,7 +51,7 @@ public class State {
             List<Card> allButLastDiscarded = new ArrayList<>(discardPile.subList(0, discardPile.size() - 1));
             deck.addAll(allButLastDiscarded);
             discardPile = new ArrayList<>(discardPile.subList(discardPile.size() - 1, discardPile.size()));
-            deck.shuffle(gameManager);
+            deck.shuffle(random);
 
             System.out.println(String.format(String.format("Deck is now %d, discard pile is now %d", deck.size(), discardPile.size())));
             System.out.println(String.format(String.format("Players hands are now %d and %d", hands.get(0).size(), hands.get(1).size())));
