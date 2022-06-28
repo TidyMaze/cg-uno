@@ -124,7 +124,7 @@ public class Referee extends AbstractReferee {
         if (validActions.isEmpty()) {
             Card drawn = gameEngine.drawOne(state);
             state.hands.get(player.getIndex()).add(drawn);
-            System.out.printf("Player %d had no valid action, drew %s%n", player.getIndex(), drawn);
+            gm.addToGameSummary(String.format("Player %d had no valid action, drew %s%n", player.getIndex(), drawn));
             validActions = GameEngine.getValidActions(state, player.getIndex());
         }
         return validActions;
