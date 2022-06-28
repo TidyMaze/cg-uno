@@ -25,11 +25,6 @@ public class DrawTwoCard implements Card {
         return 20;
     }
 
-    @Override
-    public String getDisplayText() {
-        return "+2";
-    }
-
     public Color getColor() {
         return color;
     }

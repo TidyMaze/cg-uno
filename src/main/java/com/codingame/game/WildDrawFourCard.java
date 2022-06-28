@@ -22,9 +22,4 @@ public class WildDrawFourCard implements Card {
     public int getScore() {
         return 50;
     }
-
-    @Override
-    public String getDisplayText() {
-        return "+4";
-    }
 }

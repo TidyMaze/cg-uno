@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class SkipCard implements Card {
-    private Color color;
+    private final Color color;
 
     public SkipCard(Color color) {
         this.color = color;
@@ -23,11 +23,6 @@ public class SkipCard implements Card {
     @Override
     public int getScore() {
         return 20;
-    }
-
-    @Override
-    public String getDisplayText() {
-        return "∅";
     }
 
     public Color getColor() {

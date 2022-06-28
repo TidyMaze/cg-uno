@@ -19,11 +19,6 @@ public class WildCard implements Card {
     }
 
     @Override
-    public String getDisplayText() {
-        return "\uD83C\uDFA8";
-    }
-
-    @Override
     public boolean equals(Object obj) {
         return obj instanceof WildCard;
     }

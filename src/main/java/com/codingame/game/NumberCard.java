@@ -2,11 +2,10 @@ package com.codingame.game;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.StringJoiner;
 
 public class NumberCard implements Card {
-    private Color color;
-    private Value value;
+    private final Color color;
+    private final Value value;
 
     public Color getColor() {
         return color;
@@ -30,48 +29,42 @@ public class NumberCard implements Card {
     }
 
 
-    enum Value {
-        ZERO(0),
-        ONE(1),
-        TWO(2),
-        THREE(3),
-        FOUR(4),
-        FIVE(5),
-        SIX(6),
-        SEVEN(7),
-        EIGHT(8),
-        NINE(9);
+    public enum Value {
+        ZERO,
+        ONE,
+        TWO,
+        THREE,
+        FOUR,
+        FIVE,
+        SIX,
+        SEVEN,
+        EIGHT,
+        NINE;
 
-        public final int intValue;
-
-        Value(int intValue) {
-            this.intValue = intValue;
-        }
-
-        static Value parse(String value) {
-            switch (value) {
-                case "ZERO":
-                    return ZERO;
-                case "ONE":
-                    return ONE;
-                case "TWO":
-                    return TWO;
-                case "THREE":
-                    return THREE;
-                case "FOUR":
-                    return FOUR;
-                case "FIVE":
-                    return FIVE;
-                case "SIX":
-                    return SIX;
-                case "SEVEN":
-                    return SEVEN;
-                case "EIGHT":
-                    return EIGHT;
-                case "NINE":
-                    return NINE;
+        public int getIntValue() {
+            switch (this) {
+                case ZERO:
+                    return 0;
+                case ONE:
+                    return 1;
+                case TWO:
+                    return 2;
+                case THREE:
+                    return 3;
+                case FOUR:
+                    return 4;
+                case FIVE:
+                    return 5;
+                case SIX:
+                    return 6;
+                case SEVEN:
+                    return 7;
+                case EIGHT:
+                    return 8;
+                case NINE:
+                    return 9;
                 default:
-                    throw new IllegalArgumentException("Unknown value: " + value);
+                    throw new IllegalArgumentException("Unknown value: " + this);
             }
         }
     }
@@ -93,11 +86,8 @@ public class NumberCard implements Card {
 
     @Override
     public int getScore() {
-        return value.intValue;
+        return this.value.getIntValue();
     }
 
-    @Override
-    public String getDisplayText() {
-        return String.valueOf(value.intValue);
-    }
+
 }

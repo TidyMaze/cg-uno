@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.codingame.game.graphics.Display;
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
 import com.codingame.gameengine.core.AbstractReferee;
 import com.codingame.gameengine.core.MultiplayerGameManager;
@@ -13,6 +14,7 @@ import com.google.inject.Inject;
 
 import static com.codingame.game.GraphicsConstants.CARD_HEIGHT;
 import static com.codingame.game.GraphicsConstants.CARD_WIDTH;
+import static com.codingame.game.io.Serializers.parseAction;
 import static com.codingame.gameengine.module.entities.TextBasedEntity.TextAlign.CENTER;
 
 public class Referee extends AbstractReferee {
@@ -96,7 +98,7 @@ public class Referee extends AbstractReferee {
                     player.setScore(-1);
                 }
 
-                Action action = Action.parse(line);
+                Action action = parseAction(line);
                 System.out.println("Player " + player.getIndex() + " played " + action);
 
                 System.out.println("Valid actions: " + validActions);
@@ -251,7 +253,7 @@ public class Referee extends AbstractReferee {
     }
 
     private Group drawCard(int x, int y, Card card) {
-        Optional<Integer> displayColor = card.getCardColor().map(color -> color.getDisplayColor());
+        Optional<Integer> displayColor = card.getCardColor().map(color -> Display.getDisplayColor(color));
 
         Group g = graphicEntityModule.createGroup();
 
@@ -265,7 +267,7 @@ public class Referee extends AbstractReferee {
                 .setY(y - CARD_HEIGHT / 2)
                 .setVisible(true);
 
-        Text t = graphicEntityModule.createText(card.getDisplayText())
+        Text t = graphicEntityModule.createText(Display.getCardDisplayText(card))
                 .setTextAlign(CENTER)
                 .setX(x - 20)
                 .setY(y - 30)
