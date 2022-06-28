@@ -126,4 +126,18 @@ public class GameEngine {
         }
         return res;
     }
+
+    static int computeScore(List<List<Card>> hands, int playerIndex) {
+        int score = 0;
+        for (int iHand = 0; iHand < hands.size(); iHand++) {
+            if (iHand != playerIndex) {
+                List<Card> hand = hands.get(iHand);
+                for (Card card : hand) {
+                    score += card.getScore();
+                }
+
+            }
+        }
+        return score;
+    }
 }

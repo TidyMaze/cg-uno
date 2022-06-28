@@ -144,7 +144,7 @@ public class Referee extends AbstractReferee {
 
     private void onVictory(Player player) {
         showVictoryTooltip(player);
-        player.setScore(computeScore(state.hands, player.getIndex()));
+        player.setScore(GameEngine.computeScore(state.hands, player.getIndex()));
         gm.endGame();
     }
 
@@ -158,20 +158,6 @@ public class Referee extends AbstractReferee {
 
     private Consumer<Integer> tooltipHandler(String plus2) {
         return pi -> gm.addTooltip(gm.getPlayer(pi), (gm.getPlayer(pi).getNicknameToken()) + " played a " + plus2);
-    }
-
-    private int computeScore(List<List<Card>> hands, int playerIndex) {
-        int score = 0;
-        for (int iHand = 0; iHand < hands.size(); iHand++) {
-            if (iHand != playerIndex) {
-                List<Card> hand = hands.get(iHand);
-                for (Card card : hand) {
-                    score += card.getScore();
-                }
-
-            }
-        }
-        return score;
     }
 
 }
