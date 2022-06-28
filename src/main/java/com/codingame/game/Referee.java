@@ -63,6 +63,56 @@ public class Referee extends AbstractReferee {
         int playerCount = gm.getPlayerCount();
         Player player = gm.getPlayer(state.nextPlayer);
 
+        List<Action> validActions = drawCardOrRedraw(random, player);
+
+        if (validActions.isEmpty()) {
+            skipTurnStillCannotPlayAfterRedraw(playerCount, player);
+        } else {
+            doOnePlayerTurn(onDrawTwo, onSkip, onReverse, onWildDrawFour, random, playerCount, player, validActions);
+        }
+
+        graphics.drawState(state);
+
+        System.out.printf("End of turn %d%n", turn);
+
+        // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
+    }
+
+    private void doOnePlayerTurn(Consumer<Integer> onDrawTwo, Consumer<Integer> onSkip, Consumer<Integer> onReverse, Consumer<Integer> onWildDrawFour, Random random, int playerCount, Player player, List<Action> validActions) {
+        List<Card> hand = state.hands.get(player.getIndex());
+        sendInputLines(player, validActions, hand);
+        player.execute();
+        try {
+            Action action = readPlayerAction(player);
+            System.out.println("Player " + player.getIndex() + " played " + action);
+            System.out.println("Valid actions: " + validActions);
+
+            if (isValid(validActions, action)) {
+                GameEngine.playAction(state, action, onDrawTwo, onSkip, onReverse, onWildDrawFour, playerCount, random);
+                onActionPlayed(player, action);
+
+                if (playerWon(hand)) {
+                    onVictory(player);
+                }
+            } else {
+                disqualifyPlayer(player, "Invalid action " + action);
+            }
+        } catch (TimeoutException e) {
+            disqualifyPlayer(player, String.format("$%d timeout!", player.getIndex()));
+        } catch (IllegalArgumentException e) {
+            disqualifyPlayer(player, "Invalid action " + e.getMessage());
+        } catch (NotEnoughCardsException e) {
+            gm.endGame();
+        }
+    }
+
+    private void skipTurnStillCannotPlayAfterRedraw(int playerCount, Player player) {
+        Card drawnCard = state.hands.get(player.getIndex()).get(state.hands.get(player.getIndex()).size() - 1);
+        System.out.printf("Player %d still have no valid action, skip turn%n", player.getIndex(), drawnCard);
+        state.nextPlayer = GameEngine.nextPlayerIndex(state.rotation, player.getIndex(), false, playerCount);
+    }
+
+    private List<Action> drawCardOrRedraw(Random random, Player player) {
         List<Action> validActions = GameEngine.getValidActions(state, player.getIndex());
 
         if (validActions.isEmpty()) {
@@ -71,44 +121,7 @@ public class Referee extends AbstractReferee {
             System.out.printf("Player %d had no valid action, drew %s%n", player.getIndex(), drawn);
             validActions = GameEngine.getValidActions(state, player.getIndex());
         }
-
-        if (validActions.isEmpty()) {
-            Card drawnCard = state.hands.get(player.getIndex()).get(state.hands.get(player.getIndex()).size() - 1);
-            System.out.printf("Player %d still have no valid action, skip turn%n", player.getIndex(), drawnCard);
-            state.nextPlayer = GameEngine.nextPlayerIndex(state.rotation, player.getIndex(), false, playerCount);
-        } else {
-            List<Card> hand = state.hands.get(player.getIndex());
-            sendInputLines(player, validActions, hand);
-            player.execute();
-            try {
-                Action action = readPlayerAction(player);
-                System.out.println("Player " + player.getIndex() + " played " + action);
-                System.out.println("Valid actions: " + validActions);
-
-                if (isValid(validActions, action)) {
-                    GameEngine.playAction(state, action, onDrawTwo, onSkip, onReverse, onWildDrawFour, playerCount, random);
-                    onActionPlayed(player, action);
-
-                    if (playerWon(hand)) {
-                        onVictory(player);
-                    }
-                } else {
-                    disqualifyPlayer(player, "Invalid action " + action);
-                }
-            } catch (TimeoutException e) {
-                disqualifyPlayer(player, String.format("$%d timeout!", player.getIndex()));
-            } catch (IllegalArgumentException e) {
-                disqualifyPlayer(player, "Invalid action " + e.getMessage());
-            } catch (NotEnoughCardsException e) {
-                gm.endGame();
-            }
-        }
-
-        graphics.drawState(state);
-
-        System.out.printf("End of turn %d%n", turn);
-
-        // Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
+        return validActions;
     }
 
     private static boolean isValid(List<Action> validActions, Action action) {
