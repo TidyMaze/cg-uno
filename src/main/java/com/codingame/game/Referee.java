@@ -50,6 +50,11 @@ public class Referee extends AbstractReferee {
 
     @Override
     public void gameTurn(int turn) {
+        Consumer<Integer> onDrawTwo = tooltipHandler("+2");
+        Consumer<Integer> onSkip = tooltipHandler("Skip");
+        Consumer<Integer> onReverse = tooltipHandler("Reverse");
+        Consumer<Integer> onWildDrawFour = tooltipHandler("+4");
+
         System.out.printf("Turn %d%n", turn);
 
         Player player = gm.getPlayer(state.nextPlayer);
@@ -106,10 +111,10 @@ public class Referee extends AbstractReferee {
                 boolean isValid = validActions.contains(action);
                 if (isValid) {
                     GameEngine.playAction(state, action,
-                            tooltipHandler("+2"),
-                            tooltipHandler("Skip"),
-                            tooltipHandler("Reverse"),
-                            tooltipHandler("+4"),
+                            onDrawTwo,
+                            onSkip,
+                            onReverse,
+                            onWildDrawFour,
                             gm.getPlayerCount(),
                             gm.getRandom());
                     gm.addToGameSummary(String.format("%s played %s", player.getNicknameToken(), action));
