@@ -146,6 +146,7 @@ public class Referee extends AbstractReferee {
     }
 
     void drawState() {
+        System.out.println("Drawing state");
         World world = graphicEntityModule.getWorld();
         int width = world.getWidth();
         int height = world.getHeight();
@@ -181,13 +182,13 @@ public class Referee extends AbstractReferee {
             List<Card> hand = state.hands.get(iHand);
             drawHand(hand, iHand);
         }
+
+        graphicEntityModule.commitWorldState(1);
     }
 
     private void drawHand(List<Card> hand, int playerIndex) {
         Coordinate center = getCenterOfHand(playerIndex);
         int handRectangleStartX = center.x - ((hand.size() - 1) * CARD_WIDTH) / 2;
-
-        Group g = graphicEntityModule.createGroup();
 
         for (int iCard = 0; iCard < hand.size(); iCard++) {
             drawCard(handRectangleStartX + iCard * CARD_WIDTH, center.y, hand.get(iCard));
