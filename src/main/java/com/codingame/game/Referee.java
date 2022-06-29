@@ -31,6 +31,7 @@ public class Referee extends AbstractReferee {
     Display display;
 
     GameEngine gameEngine;
+    private List<Entity> lastTurnEntities;
 
     @Override
     public void init() {
@@ -78,11 +79,18 @@ public class Referee extends AbstractReferee {
         } else {
             System.out.printf("Turn %d%n", turn);
             doOnePlayerTurn(player, validActions);
-            display.drawState(state);
+            clearLastTurnEntities();
+            lastTurnEntities = display.drawState(state);
             System.out.printf("End of turn %d%n", turn);
         }
 
+        graphicEntityModule.commitWorldState(1);
+    }
 
+    private void clearLastTurnEntities() {
+        if (lastTurnEntities != null) {
+            lastTurnEntities.forEach(e -> e.setVisible(false));
+        }
     }
 
     private void doOnePlayerTurn(Player player, List<Action> validActions) {

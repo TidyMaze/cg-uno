@@ -6,6 +6,7 @@ import com.codingame.game.models.State;
 import com.codingame.game.models.cards.*;
 import com.codingame.gameengine.module.entities.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,32 +70,35 @@ public class Display {
     }
 
 
-    public void drawState(State state) {
+    public List<Entity> drawState(State state) {
         System.out.println("Drawing state");
 
         // calibration
-        drawCard(0, 0, new NumberCard(Color.BLUE, NumberCard.Value.ONE));
-        drawCard(worldWidth, worldHeight, new ReverseCard(Color.RED));
+//        drawCard(0, 0, new NumberCard(Color.BLUE, NumberCard.Value.ONE));
+//        drawCard(worldWidth, worldHeight, new ReverseCard(Color.RED));
+
+        List<Entity> entities = new ArrayList<>();
 
         int discardPileX = worldWidth / 2;
         int discardPileY = worldHeight / 2;
         if (!state.discardPile.isEmpty()) {
-            drawCard(discardPileX, discardPileY, state.discardPile.get(state.discardPile.size() - 1));
+            entities.add(drawCard(discardPileX, discardPileY, state.discardPile.get(state.discardPile.size() - 1)));
         }
 
         int deckPileX = worldWidth / 2 - CARD_WIDTH - 20;
         int deckPileY = worldHeight / 2;
 
         if (!state.deck.isEmpty()) {
-            drawDeck(deckPileX, deckPileY, state.deck.size());
+            entities.add(drawDeck(deckPileX, deckPileY, state.deck.size()));
         }
 
         for (int iHand = 0; iHand < state.hands.size(); iHand++) {
             List<Card> hand = state.hands.get(iHand);
-            drawHand(hand, iHand);
+            entities.add(drawHand(hand, iHand));
         }
 
         graphicEntityModule.commitWorldState(1);
+        return entities;
     }
 
     public void drawBackground() {
@@ -105,7 +109,7 @@ public class Display {
                 .setVisible(true);
     }
 
-    private void drawHand(List<Card> hand, int playerIndex) {
+    private Group drawHand(List<Card> hand, int playerIndex) {
         Coordinate center = getCenterOfHand(playerIndex);
 
         Group g = graphicEntityModule.createGroup();
@@ -123,6 +127,7 @@ public class Display {
         double rotation = getRotation(playerIndex);
         g.setRotation(rotation);
 
+        return g;
     }
 
     private double getRotation(int playerIndex) {
@@ -196,8 +201,11 @@ public class Display {
         return g;
     }
 
-    private void drawDeck(int x, int y, int count) {
-        graphicEntityModule.createRoundedRectangle()
+    private Group drawDeck(int x, int y, int count) {
+
+        Group g = graphicEntityModule.createGroup();
+
+        g.add(graphicEntityModule.createRoundedRectangle()
                 .setFillColor(CARD_BACK_COLOR)
                 .setLineColor(WHITE)
                 .setLineWidth(5)
@@ -205,16 +213,16 @@ public class Display {
                 .setWidth(CARD_WIDTH)
                 .setX(x - CARD_WIDTH / 2)
                 .setY(y - CARD_HEIGHT / 2)
-                .setVisible(true);
+                .setVisible(true));
 
-        graphicEntityModule.createCircle()
+        g.add(graphicEntityModule.createCircle()
                 .setFillColor(RED)
                 .setRadius(CARD_WIDTH / 2 - 10)
                 .setX(x)
                 .setY(y)
-                .setVisible(true);
+                .setVisible(true));
 
-        graphicEntityModule.createText(String.format("%d", count))
+        g.add(graphicEntityModule.createText(String.format("%d", count))
                 .setTextAlign(CENTER)
                 .setX(x - 25)
                 .setY(y - 30)
@@ -223,6 +231,8 @@ public class Display {
                 .setFillColor(WHITE)
                 .setStrokeColor(BLACK)
                 .setStrokeThickness(5)
-                .setVisible(true);
+                .setVisible(true));
+
+        return g;
     }
 }
