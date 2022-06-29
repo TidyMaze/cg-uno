@@ -45,6 +45,7 @@ public class Referee extends AbstractReferee {
         GameEngineListener listener = new CodingameGameEngineListener(gm);
         gameEngine = new GameEngine(playerCount, gm.getRandom(), listener);
 
+        display.drawBackground();
 
     }
 

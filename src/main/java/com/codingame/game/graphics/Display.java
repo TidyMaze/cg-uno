@@ -72,12 +72,6 @@ public class Display {
     public void drawState(State state) {
         System.out.println("Drawing state");
 
-        graphicEntityModule.createRectangle()
-                .setHeight(worldHeight)
-                .setWidth(worldWidth)
-                .setFillColor(BACKGROUND_COLOR)
-                .setVisible(true);
-
         // calibration
         drawCard(0, 0, new NumberCard(Color.BLUE, NumberCard.Value.ONE));
         drawCard(worldWidth, worldHeight, new ReverseCard(Color.RED));
@@ -101,6 +95,14 @@ public class Display {
         }
 
         graphicEntityModule.commitWorldState(1);
+    }
+
+    public void drawBackground() {
+        graphicEntityModule.createRectangle()
+                .setHeight(worldHeight)
+                .setWidth(worldWidth)
+                .setFillColor(BACKGROUND_COLOR)
+                .setVisible(true);
     }
 
     private void drawHand(List<Card> hand, int playerIndex) {
