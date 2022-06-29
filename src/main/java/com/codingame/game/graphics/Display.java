@@ -220,6 +220,7 @@ public class Display {
                 .setRadius(CARD_WIDTH / 2 - 10)
                 .setX(x)
                 .setY(y)
+                .setZIndex(10)
                 .setVisible(true));
 
         g.add(graphicEntityModule.createText(String.format("%d", count))
@@ -231,6 +232,7 @@ public class Display {
                 .setFillColor(WHITE)
                 .setStrokeColor(BLACK)
                 .setStrokeThickness(5)
+                .setZIndex(20)
                 .setVisible(true));
 
         return g;
